@@ -11,18 +11,6 @@
 
 ---
 
-## 📋 Содержание
-
-- [О проекте](#-%D0%BE-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B5)
-- [Структура проекта](#-%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0)
-- [Технологический стек](#-%D1%82%D0%B5%D1%85%D0%BD%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9-%D1%81%D1%82%D0%B5%D0%BA)
-- [Быстрый старт](#-%D0%B1%D1%8B%D1%81%D1%82%D1%80%D1%8B%D0%B9-%D1%81%D1%82%D0%B0%D1%80%D1%82)
-- [Развертывание](#-%D1%80%D0%B0%D0%B7%D0%B2%D0%B5%D1%80%D1%82%D1%8B%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5)
-- [API документация](#-api-%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F)
-- [Архитектура](#-%D0%B0%D1%80%D1%85%D0%B8%D1%82%D0%B5%D0%BA%D1%82%D1%83%D1%80%D0%B0)
-
----
-
 ## 🎯 О проекте
 
 **FastAPI Shop** - это современное веб-приложение для электронной коммерции. Проект демонстрирует best practices разработки full-stack приложений с разделением backend и frontend.
@@ -114,7 +102,7 @@ fastapi-shop/
 │   └── nginx.conf               # Главная конфигурация Nginx
 │
 ├── docker-compose.yml            # Оркестрация Docker контейнеров
-├── deploy.sh                     # Скрипт автоматического деплоя
+|
 └── README.md                     # Документация проекта
 ```
 
@@ -169,8 +157,6 @@ fastapi-shop/
 - **Docker** - контейнеризация приложений
 - **Docker Compose** - оркестрация multi-container приложений
 - **Nginx** - reverse proxy и веб-сервер
-- **Let's Encrypt** - бесплатные SSL сертификаты
-- **Certbot** - автоматическое обновление сертификатов
 
 ---
 
@@ -185,14 +171,7 @@ fastapi-shop/
 
 ### Локальная разработка
 
-#### 1️⃣ Клонирование репозитория
-
-```bash
-git clone https://github.com/yourusername/fastapi-shop.git
-cd fastapi-shop
-```
-
-#### 2️⃣ Запуск Backend
+#### Запуск Backend
 
 ```bash
 # Переход в директорию backend
@@ -217,7 +196,7 @@ python run.py
 Backend будет доступен по адресу: **http://localhost:8000**
 API документация (Swagger UI): **http://localhost:8000/api/docs**
 
-#### 3️⃣ Запуск Frontend
+#### Запуск Frontend
 
 ```bash
 # Переход в директорию frontend (новый терминал)
@@ -231,158 +210,6 @@ npm run dev
 ```
 
 Frontend будет доступен по адресу: **http://localhost:5173**
-
----
-
-## 🌐 Развертывание
-
-Проект включает полностью автоматизированный скрипт развертывания на production сервер с Ubuntu.
-
-### Что делает скрипт `deploy.sh`:
-
-✅ Обновляет систему Ubuntu
-✅ Устанавливает Docker и Docker Compose
-✅ Устанавливает Certbot для SSL
-✅ Получает SSL сертификаты от Let's Encrypt
-✅ Настраивает Nginx как reverse proxy
-✅ Собирает и запускает Docker контейнеры
-✅ Заполняет базу данных тестовыми данными
-✅ Настраивает автоматическое обновление SSL сертификатов
-
-### 📦 Инструкция по развертыванию
-
-#### Шаг 1: Подготовка сервера
-
-```bash
-# Подключение к VPS серверу
-ssh root@your-server-ip
-
-# Клонирование репозитория
-git clone https://github.com/yourusername/fastapi-shop.git
-cd fastapi-shop
-```
-
-#### Шаг 2: Настройка DNS
-
-Перед запуском скрипта убедитесь, что DNS записи вашего домена указывают на IP адрес сервера:
-
-```
-A запись:     yourdomain.com    →  SERVER_IP
-A запись:     www.yourdomain.com →  SERVER_IP
-```
-
-Проверить можно командой:
-
-```bash
-dig yourdomain.com +short
-dig www.yourdomain.com +short
-```
-
-#### Шаг 3: Запуск скрипта деплоя
-
-```bash
-# Сделать скрипт исполняемым
-chmod +x deploy.sh
-
-# Запустить с правами root
-sudo ./deploy.sh
-```
-
-#### Шаг 4: Интерактивная настройка
-
-Скрипт запросит у вас:
-
-1. **Домен** (например: `myshop.com`)
-2. **Email для SSL** (например: `admin@myshop.com`)
-3. **Название магазина** (например: `My Awesome Shop`)
-
-После ввода данных скрипт:
-
-- Создаст конфигурационные файлы
-- Получит SSL сертификаты
-- Соберет и запустит все сервисы
-
-#### Шаг 5: Проверка работоспособности
-
-После завершения скрипта ваш магазин будет доступен по адресам:
-
-- 🌐 **Магазин**: `https://yourdomain.com`
-- 🌐 **API документация**: `https://yourdomain.com/api/docs`
-- ✅ **Health check**: `https://yourdomain.com/health`
-
-### 🔧 Управление после деплоя
-
-#### Просмотр логов
-
-```bash
-# Все сервисы
-docker compose logs -f
-
-# Только backend
-docker compose logs -f backend
-
-# Только frontend
-docker compose logs -f frontend
-
-# Nginx
-docker compose logs -f nginx
-```
-
-#### Перезапуск сервисов
-
-```bash
-# Перезапуск всех контейнеров
-docker compose restart
-
-# Перезапуск конкретного сервиса
-docker compose restart backend
-```
-
-#### Остановка приложения
-
-```bash
-# Остановить все контейнеры
-docker compose down
-
-# Остановить и удалить volumes (БД будет удалена!)
-docker compose down -v
-```
-
-#### Обновление приложения
-
-```bash
-# Получить последние изменения
-git pull
-
-# Пересобрать и перезапустить контейнеры
-docker compose up -d --build
-```
-
-#### Резервное копирование БД
-
-```bash
-# Создать backup базы данных
-docker compose exec backend cp /app/shop.db /app/backup_shop.db
-
-# Скопировать на хост машину
-docker cp fashop_backend:/app/backup_shop.db ./backup_shop.db
-```
-
-### 🔐 SSL сертификаты
-
-Сертификаты автоматически обновляются через контейнер `certbot` каждые 12 часов.
-
-**Ручное обновление:**
-
-```bash
-docker compose restart certbot
-```
-
-**Проверка срока действия:**
-
-```bash
-sudo certbot certificates
-```
 
 ---
 
@@ -473,103 +300,3 @@ curl -X POST "http://localhost:8000/api/cart/add" \
 
 ---
 
-## 🏗 Архитектура
-
-### Backend Architecture (Layered Architecture)
-
-```
-┌─────────────────────────────────────────┐
-│           API Layer (Routes)            │  ← HTTP Endpoints
-├─────────────────────────────────────────┤
-│        Service Layer (Services)         │  ← Business Logic
-├─────────────────────────────────────────┤
-│    Repository Layer (Repositories)      │  ← Data Access
-├─────────────────────────────────────────┤
-│      Database Layer (SQLAlchemy)        │  ← ORM
-└─────────────────────────────────────────┘
-```
-
-**Преимущества подхода:**
-
-- ✅ Разделение ответственности (Separation of Concerns)
-- ✅ Легкое тестирование каждого слоя
-- ✅ Возможность замены компонентов без изменения других слоев
-- ✅ Масштабируемость кода
-
-### Frontend Architecture (Component-Based)
-
-```
-┌─────────────────────────────────────────┐
-│         Views (Pages)                   │  ← Route Components
-├─────────────────────────────────────────┤
-│         Components                       │  ← Reusable UI
-├─────────────────────────────────────────┤
-│         Stores (Pinia)                  │  ← State Management
-├─────────────────────────────────────────┤
-│         Services (API)                  │  ← HTTP Client
-└─────────────────────────────────────────┘
-```
-
-### Data Flow (Client-Server)
-
-```
-┌──────────┐         ┌─────────┐         ┌──────────┐         ┌──────────┐
-│  Vue.js  │ ──────> │  Nginx  │ ──────> │  FastAPI │ ──────> │  SQLite  │
-│ Frontend │ <────── │  Proxy  │ <────── │  Backend │ <────── │    DB    │
-└──────────┘  HTTPS  └─────────┘   HTTP  └──────────┘   SQL   └──────────┘
-```
-
-### Docker Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Docker Host                          │
-│                                                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌─────────────┐ │
-│  │   Nginx      │  │   Frontend   │  │   Backend   │ │
-│  │ (Port 80/443)│  │  (Vue.js)    │  │  (FastAPI)  │ │
-│  └──────┬───────┘  └──────┬───────┘  └──────┬──────┘ │
-│         │                 │                  │         │
-│         └─────────────────┴──────────────────┘         │
-│                                                         │
-│  ┌──────────────────────────────────────────────────┐ │
-│  │           Docker Network (fashop_network)        │ │
-│  └──────────────────────────────────────────────────┘ │
-│                                                         │
-│  ┌──────────────┐                                     │
-│  │   Certbot    │  (SSL Certificate Renewal)          │
-│  └──────────────┘                                     │
-└─────────────────────────────────────────────────────────┘
-```
-
----
-
-## 🧪 Тестирование
-
-### Backend тесты (pytest)
-
-```bash
-cd backend
-pytest
-```
-
-### Frontend тесты (Vitest)
-
-```bash
-cd frontend
-npm run test
-```
-
-### API тестирование (Postman)
-
-Импортируйте коллекцию из файла `backend/test_commands.md`
-
----
-
-
-<div align="center">
-
-
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/s6ptember)
-
-</div>
