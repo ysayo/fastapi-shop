@@ -23,7 +23,7 @@ class AuthService:
         if not user or not verify_password(password, user.hashed_password):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect email or password",
+                detail="Incorrect email or password OR there is no registered user with that email",
                 headers={"WWW-Authenticate": "Bearer"},
             )
         return create_access_token(data={"sub": user.email})
