@@ -26,7 +26,6 @@ app.mount('/static', StaticFiles(directory=settings.static_dir), name='static')
 app.include_router(products_router)
 app.include_router(categories_router)
 app.include_router(cart_router)
-
 app.include_router(auth_router)
 
 @app.on_event('startup')
