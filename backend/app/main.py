@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from .config import settings
 from .database import init_db
 from .routes import products_router, categories_router, cart_router
+from .routes.auth import router as auth_router
 
 app = FastAPI(
     title=settings.app_name,
@@ -25,6 +26,8 @@ app.mount('/static', StaticFiles(directory=settings.static_dir), name='static')
 app.include_router(products_router)
 app.include_router(categories_router)
 app.include_router(cart_router)
+
+app.include_router(auth_router)
 
 @app.on_event('startup')
 def on_startup():
