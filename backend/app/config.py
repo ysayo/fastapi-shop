@@ -13,6 +13,11 @@ class Settings(BaseSettings):
     ]
     static_dir: str = "static"
     images_dir: str = "static/images"
+    secret_key: str = "your-secret-key-change-in-production"
+    algorithm: str = "HS256"
+    # access_token: str = ""
+    access_token_expires_minutes: int = 30
+    # refresh_token: str = ""
 
     class Config:
         env_file = ".env"
