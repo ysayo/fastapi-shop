@@ -21,12 +21,38 @@ from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandObject, CommandStart
 from aiogram.types import Message
 
+# Локальный запуск: подхватываем telegram-bot/.env, если он есть.
+# В Docker переменные приходят из docker-compose, файла нет — это ок.
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    pass
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("bot")
 
-BOT_TOKEN = os.environ["BOT_TOKEN"]
-BACKEND_URL = os.environ.get("BACKEND_URL", "http://backend:8000").rstrip("/")
-INTERNAL_SECRET = os.environ["INTERNAL_SECRET"]
+
+def _require(name: str) -> str:
+    """Прочитать обязательную переменную окружения или завершиться с понятной ошибкой."""
+    value = os.environ.get(name)
+    if not value:
+        raise SystemExit(
+            f"Переменная {name} не задана.\n"
+            f"Укажите её в переменных окружения или в файле telegram-bot/.env.\n"
+            f"Пример .env:\n"
+            f"  BOT_TOKEN=123456:ABC...        # токен от @BotFather\n"
+            f"  INTERNAL_SECRET=<секрет>        # = TELEGRAM_INTERNAL_SECRET бэкенда\n"
+            f"  BACKEND_URL=http://localhost:8000"
+        )
+    return value
+
+
+# По умолчанию backend на localhost (локальный запуск); в Docker URL задаёт compose.
+BOT_TOKEN = _require("BOT_TOKEN")
+INTERNAL_SECRET = _require("INTERNAL_SECRET")
+BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000").rstrip("/")
 
 dp = Dispatcher()
 
