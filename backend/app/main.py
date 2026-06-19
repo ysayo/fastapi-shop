@@ -5,6 +5,7 @@ from .config import settings
 from .database import init_db
 from .routes import products_router, categories_router, cart_router
 from .routes.auth import router as auth_router
+from .services.email_service import log_email_mode
 
 app = FastAPI(
     title=settings.app_name,
@@ -31,6 +32,7 @@ app.include_router(auth_router)
 @app.on_event('startup')
 def on_startup():
     init_db()
+    log_email_mode()
 
 @app.get('/')
 def root():

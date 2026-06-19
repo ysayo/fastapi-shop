@@ -8,6 +8,7 @@ class UserResponse(BaseModel):
     id: int
     email: str
     is_active: bool
+    is_verified: bool
 
     model_config = {"from_attributes": True}
 
@@ -17,3 +18,10 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: str | None = None
+
+class VerifyRequest(BaseModel):
+    email: EmailStr
+    code: str
+
+class ResendRequest(BaseModel):
+    email: EmailStr

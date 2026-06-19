@@ -19,6 +19,13 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     # refresh_token: str = ""
 
+    # Подтверждение почты по коду (Brevo)
+    # Если brevo_api_key пуст — код выводится в консоль вместо отправки письма.
+    brevo_api_key: str = ""
+    email_from: str = ""              # подтверждённый адрес-отправитель в Brevo
+    email_from_name: str = "FastAPI Shop"
+    verification_code_ttl_minutes: int = 15
+
     class Config:
         env_file = ".env"
 

@@ -1,15 +1,19 @@
 from datetime import datetime, timedelta
+import bcrypt
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 from ..config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__rounds=12)
+# bcrypt хеширует не более 72 байт пароля. В bcrypt 5.x более длинный пароль
+# вызывает ошибку (раньше он молча обрезался), поэтому обрезаем сами.
+def _password_bytes(password: str) -> bytes:
+    return password.encode("utf-8")[:72]
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    salt = bcrypt.gensalt(rounds=12)
+    return bcrypt.hashpw(_password_bytes(password), salt).decode("utf-8")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    return bcrypt.checkpw(_password_bytes(plain_password), hashed_password.encode("utf-8"))
 
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()

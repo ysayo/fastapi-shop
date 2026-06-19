@@ -14,3 +14,10 @@ class UserRepository:
         self.db.commit()
         self.db.refresh(user)
         return user
+
+    def save(self, user: User) -> User:
+        """Сохранить изменения уже существующего пользователя."""
+        self.db.add(user)
+        self.db.commit()
+        self.db.refresh(user)
+        return user
