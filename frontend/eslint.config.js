@@ -23,4 +23,13 @@ export default defineConfig([
   js.configs.recommended,
   ...pluginVue.configs['flat/essential'],
   skipFormatting,
+
+  {
+    // Имена давно существующих компонентов из одного слова не считаем ошибкой
+    name: 'app/single-word-components',
+    files: ['src/components/Header.vue'],
+    rules: {
+      'vue/multi-word-component-names': 'off',
+    },
+  },
 ])
