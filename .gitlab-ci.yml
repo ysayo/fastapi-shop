@@ -126,7 +126,9 @@ deploy:production:
       && docker compose up -d --build
       && docker image prune -f"
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    # Деплой появляется только в ветке по умолчанию и только когда заданы
+    # переменные доступа к серверу (SSH_HOST). Запускается вручную (кнопкой)
+    # и не «валит» пайплайн, даже если завершится с ошибкой.
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $SSH_HOST
       when: manual
-  # Деплой не должен блокировать пайплайн, если его не запускают вручную
-  allow_failure: false
+      allow_failure: true
