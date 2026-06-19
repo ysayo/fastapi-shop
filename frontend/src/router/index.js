@@ -8,6 +8,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/views/HomePage.vue'
 import ProductDetailPage from '@/views/ProductDetailPage.vue'
 import CartPage from '@/views/CartPage.vue'
+import LoginPage from '@/views/LoginPage.vue'
+import RegisterPage from '@/views/RegisterPage.vue'
+import VerifyPage from '@/views/VerifyPage.vue'
+import i18n from '@/i18n'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,7 +21,7 @@ const router = createRouter({
       name: 'home',
       component: HomePage,
       meta: {
-        title: 'Shop - Home',
+        titleKey: 'titles.home',
       },
     },
     {
@@ -25,7 +29,7 @@ const router = createRouter({
       name: 'product-detail',
       component: ProductDetailPage,
       meta: {
-        title: 'Product Details',
+        titleKey: 'titles.product',
       },
     },
     {
@@ -33,7 +37,31 @@ const router = createRouter({
       name: 'cart',
       component: CartPage,
       meta: {
-        title: 'Shopping Cart',
+        titleKey: 'titles.cart',
+      },
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginPage,
+      meta: {
+        titleKey: 'titles.login',
+      },
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterPage,
+      meta: {
+        titleKey: 'titles.register',
+      },
+    },
+    {
+      path: '/verify',
+      name: 'verify',
+      component: VerifyPage,
+      meta: {
+        titleKey: 'titles.verify',
       },
     },
   ],
@@ -49,7 +77,8 @@ const router = createRouter({
 
 // Обновление заголовка страницы при навигации
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title || 'FastAPI Shop'
+  const { t } = i18n.global
+  document.title = to.meta.titleKey ? t(to.meta.titleKey) : 'FastAPI Shop'
   next()
 })
 

@@ -9,8 +9,8 @@
     <div class="max-w-7xl mx-auto px-4 py-8">
       <!-- Заголовок -->
       <div class="mb-8">
-        <h1 class="text-4xl font-extrabold text-black mb-2">Product Catalog</h1>
-        <p class="text-gray-500">Discover our amazing products</p>
+        <h1 class="text-4xl font-extrabold text-black mb-2">{{ t('home.title') }}</h1>
+        <p class="text-gray-500">{{ t('home.subtitle') }}</p>
       </div>
 
       <div class="flex gap-8">
@@ -24,8 +24,7 @@
           <!-- Информация о фильтрации -->
           <div class="mb-6 flex items-center justify-between">
             <p class="text-gray-700">
-              <span class="font-bold">{{ productsStore.productsCount }}</span>
-              {{ productsStore.productsCount === 1 ? 'product' : 'products' }} found
+              {{ t('home.productsFound', productsStore.productsCount) }}
             </p>
 
             <!-- Кнопка сброса фильтра -->
@@ -34,7 +33,7 @@
               @click="productsStore.clearCategoryFilter"
               class="text-sm text-gray-500 hover:text-black transition-colors font-medium"
             >
-              Clear filter
+              {{ t('home.clearFilter') }}
             </button>
           </div>
 
@@ -43,12 +42,12 @@
             <div
               class="inline-block animate-spin rounded-none h-12 w-12 border-b-2 border-black"
             ></div>
-            <p class="mt-4 text-gray-500">Loading products...</p>
+            <p class="mt-4 text-gray-500">{{ t('home.loading') }}</p>
           </div>
 
           <!-- Ошибка -->
           <div v-else-if="productsStore.error" class="text-center py-12">
-            <p class="text-red-600 font-medium">{{ productsStore.error }}</p>
+            <p class="text-red-600 font-medium">{{ t(productsStore.error) }}</p>
           </div>
 
           <!-- Список товаров -->
@@ -79,12 +78,12 @@
                 d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
               />
             </svg>
-            <p class="text-gray-500 text-lg font-medium">No products found</p>
+            <p class="text-gray-500 text-lg font-medium">{{ t('home.noProducts') }}</p>
             <button
               @click="productsStore.clearCategoryFilter"
               class="mt-4 text-black hover:underline font-medium"
             >
-              View all products
+              {{ t('home.viewAll') }}
             </button>
           </div>
         </main>
@@ -95,10 +94,12 @@
 
 <script setup>
 import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useProductsStore } from '@/stores/products'
 import ProductCard from '@/components/ProductCard.vue'
 import CategoryFilter from '@/components/CategoryFilter.vue'
 
+const { t } = useI18n()
 const productsStore = useProductsStore()
 
 /**

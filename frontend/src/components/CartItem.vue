@@ -24,7 +24,7 @@
         <h3 class="text-lg font-bold text-black mb-2">
           {{ item.name }}
         </h3>
-        <p class="text-gray-600 text-sm mb-3">${{ item.price.toFixed(2) }} each</p>
+        <p class="text-gray-600 text-sm mb-3">${{ item.price.toFixed(2) }} {{ t('cart.each') }}</p>
 
         <!-- Управление количеством -->
         <div class="flex items-center gap-4">
@@ -110,7 +110,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useCartStore } from '@/stores/cart'
+
+const { t } = useI18n()
 
 // Props
 const props = defineProps({

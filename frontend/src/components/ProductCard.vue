@@ -24,7 +24,7 @@
     <div class="p-4">
       <!-- Категория -->
       <div class="text-xs text-gray-500 uppercase tracking-wide mb-2">
-        {{ product.category.name }}
+        {{ categoryName(product.category) }}
       </div>
 
       <!-- Название товара -->
@@ -43,13 +43,13 @@
         :disabled="adding"
         class="w-full bg-black text-white py-3 px-4 rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
       >
-        {{ adding ? 'Adding...' : 'Add to Cart' }}
+        {{ adding ? t('product.adding') : t('product.addToCart') }}
       </button>
 
       <!-- Уведомление об успешном добавлении -->
       <transition name="fade">
         <div v-if="showNotification" class="mt-2 text-sm text-green-600 text-center font-medium">
-          ✓ Added to cart!
+          {{ t('product.addedToCart') }}
         </div>
       </transition>
     </div>
@@ -58,7 +58,12 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useCartStore } from '@/stores/cart'
+import { useCategoryName } from '@/composables/useCategoryName'
+
+const { t } = useI18n()
+const categoryName = useCategoryName()
 
 // Props
 const props = defineProps({

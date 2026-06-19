@@ -37,7 +37,8 @@ export const useProductsStore = defineStore('products', () => {
       const response = await productsAPI.getAll()
       products.value = response.data.products
     } catch (err) {
-      error.value = 'Failed to load products'
+      // Храним ключ перевода, а не текст — перевод происходит при отображении
+      error.value = 'errors.loadProducts'
       console.error('Error fetching products:', err)
     } finally {
       loading.value = false
@@ -54,7 +55,7 @@ export const useProductsStore = defineStore('products', () => {
       const response = await productsAPI.getById(id)
       return response.data
     } catch (err) {
-      error.value = 'Failed to load product'
+      error.value = 'errors.loadProduct'
       console.error('Error fetching product:', err)
       throw err
     } finally {

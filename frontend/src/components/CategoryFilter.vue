@@ -6,7 +6,7 @@
 
 <template>
   <div class="bg-white border-2 border-gray-200 rounded-lg p-6">
-    <h2 class="text-2xl font-bold text-black mb-6">Categories</h2>
+    <h2 class="text-2xl font-bold text-black mb-6">{{ t('categories.title') }}</h2>
 
     <!-- Список категорий -->
     <ul class="space-y-2">
@@ -21,7 +21,7 @@
               : 'bg-gray-50 hover:bg-gray-100 text-gray-700',
           ]"
         >
-          All Categories
+          {{ t('categories.all') }}
           <span v-if="!productsStore.selectedCategory" class="float-right">
             ({{ totalProductsCount }})
           </span>
@@ -39,7 +39,7 @@
               : 'bg-gray-50 hover:bg-gray-100 text-gray-700',
           ]"
         >
-          {{ category.name }}
+          {{ categoryName(category) }}
           <span v-if="productsStore.selectedCategory === category.id" class="float-right">
             ({{ productsStore.productsCount }})
           </span>
@@ -51,8 +51,12 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useProductsStore } from '@/stores/products'
+import { useCategoryName } from '@/composables/useCategoryName'
 
+const { t } = useI18n()
+const categoryName = useCategoryName()
 const productsStore = useProductsStore()
 
 /**

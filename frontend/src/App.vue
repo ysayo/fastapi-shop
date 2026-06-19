@@ -16,8 +16,8 @@
     <footer class="bg-white border-t-2 border-black mt-16">
       <div class="max-w-7xl mx-auto px-4 py-8">
         <div class="text-center text-gray-600">
-          <p class="mb-2">© 2024 FastAPI Shop. All rights reserved.</p>
-          <p class="text-sm">Built with FastAPI + Vue.js</p>
+          <p class="mb-2">{{ t('footer.rights') }}</p>
+          <p class="text-sm">{{ t('footer.builtWith') }}</p>
         </div>
       </div>
     </footer>
@@ -25,12 +25,22 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { RouterView } from 'vue-router'
+import { onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { RouterView, useRoute } from 'vue-router'
 import Header from '@/components/Header.vue'
 import { useCartStore } from '@/stores/cart'
 
+const { t, locale } = useI18n()
+const route = useRoute()
 const cartStore = useCartStore()
+
+// Обновлять заголовок вкладки при смене языка на текущей странице
+watch(locale, () => {
+  if (route.meta.titleKey) {
+    document.title = t(route.meta.titleKey)
+  }
+})
 
 /**
  * Инициализация приложения

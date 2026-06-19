@@ -26,13 +26,13 @@
             d="M15 19l-7-7 7-7"
           />
         </svg>
-        Back to catalog
+        {{ t('product.backToCatalog') }}
       </button>
 
       <!-- Состояние загрузки -->
       <div v-if="loading" class="text-center py-16">
         <div class="inline-block animate-spin rounded-full h-14 w-14 border-b-4 border-black"></div>
-        <p class="mt-4 text-lg text-gray-500">Loading product...</p>
+        <p class="mt-4 text-lg text-gray-500">{{ t('product.loading') }}</p>
       </div>
 
       <!-- Ошибка -->
@@ -42,7 +42,7 @@
           @click="router.push('/')"
           class="mt-6 bg-black text-white py-3 px-8 text-lg font-semibold rounded-none hover:bg-gray-900 transition-colors"
         >
-          Return to catalog
+          {{ t('product.returnToCatalog') }}
         </button>
       </div>
 
@@ -66,7 +66,7 @@
           <div class="flex flex-col">
             <!-- Категория -->
             <div class="text-sm text-gray-500 uppercase tracking-wider mb-3 font-medium">
-              {{ product.category.name }}
+              {{ categoryName(product.category) }}
             </div>
 
             <!-- Название -->
@@ -81,9 +81,9 @@
 
             <!-- Описание -->
             <div class="mb-8">
-              <h2 class="text-xl font-bold text-black mb-3">Description</h2>
+              <h2 class="text-xl font-bold text-black mb-3">{{ t('product.description') }}</h2>
               <p class="text-gray-600 leading-relaxed">
-                {{ product.description || 'No description available.' }}
+                {{ product.description || t('product.noDescription') }}
               </p>
             </div>
 
@@ -94,7 +94,7 @@
                 :disabled="adding"
                 class="w-full bg-black text-white py-4 px-6 text-lg font-semibold rounded-none hover:bg-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {{ adding ? 'Adding to cart...' : 'Add to Cart' }}
+                {{ adding ? t('product.addingToCart') : t('product.addToCart') }}
               </button>
 
               <!-- Уведомление об успешном добавлении -->
@@ -103,15 +103,15 @@
                   v-if="showNotification"
                   class="mt-4 bg-black text-white px-4 py-3 rounded-none text-center font-medium"
                 >
-                  ✓ Product added to cart!
+                  {{ t('product.addedNotification') }}
                 </div>
               </transition>
             </div>
 
             <!-- Дополнительная информация -->
             <div class="mt-8 pt-6 border-t-2 border-gray-100">
-              <p class="text-sm text-gray-500">Product ID: {{ product.id }}</p>
-              <p class="text-sm text-gray-500">Added: {{ formatDate(product.created_at) }}</p>
+              <p class="text-sm text-gray-500">{{ t('product.id', { id: product.id }) }}</p>
+              <p class="text-sm text-gray-500">{{ t('product.added', { date: formatDate(product.created_at) }) }}</p>
             </div>
           </div>
         </div>
@@ -122,10 +122,14 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useProductsStore } from '@/stores/products'
 import { useCartStore } from '@/stores/cart'
+import { useCategoryName } from '@/composables/useCategoryName'
 
+const { t, locale } = useI18n()
+const categoryName = useCategoryName()
 const route = useRoute()
 const router = useRouter()
 const productsStore = useProductsStore()
@@ -149,7 +153,7 @@ async function loadProduct() {
     const productId = parseInt(route.params.id)
     product.value = await productsStore.fetchProductById(productId)
   } catch (err) {
-    error.value = 'Product not found'
+    error.value = t('product.notFound')
     console.error('Error loading product:', err)
   } finally {
     loading.value = false
@@ -178,7 +182,8 @@ async function handleAddToCart() {
  */
 function formatDate(dateString) {
   const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', {
+  const localeTag = locale.value === 'ru' ? 'ru-RU' : 'en-US'
+  return date.toLocaleDateString(localeTag, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
