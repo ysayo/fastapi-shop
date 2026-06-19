@@ -48,6 +48,26 @@
         </button>
       </form>
 
+      <!-- Альтернатива: получить код в Telegram (если бот настроен) -->
+      <div v-if="telegramLink" class="mt-6">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="flex-grow border-t border-gray-200"></span>
+          <span class="text-sm text-gray-400">{{ t('verify.or') }}</span>
+          <span class="flex-grow border-t border-gray-200"></span>
+        </div>
+        <a
+          :href="telegramLink"
+          target="_blank"
+          rel="noopener"
+          class="flex items-center justify-center gap-2 w-full border-2 border-black text-black font-semibold py-2.5 rounded-md hover:bg-black hover:text-white transition-colors"
+        >
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z" />
+          </svg>
+          {{ t('verify.telegramButton') }}
+        </a>
+      </div>
+
       <!-- Повторная отправка кода -->
       <p class="text-center text-sm text-gray-600 mt-6">
         {{ t('verify.didNotReceive') }}
@@ -77,6 +97,7 @@ const authStore = useAuthStore()
 const resolveAuthError = useAuthErrorMessage()
 
 const email = ref(route.query.email || '')
+const telegramLink = ref(route.query.tg || '')
 const code = ref('')
 const error = ref('')
 const resentMessage = ref('')

@@ -34,9 +34,11 @@ export const useAuthStore = defineStore('auth', () => {
   /**
    * Зарегистрировать нового пользователя.
    * Вход НЕ выполняется — сначала нужно подтвердить почту кодом.
+   * Возвращает данные ответа (в т.ч. telegram_link, если бот настроен).
    */
   async function register(userEmail, password) {
-    await authAPI.register(userEmail, password)
+    const response = await authAPI.register(userEmail, password)
+    return response.data
   }
 
   /**

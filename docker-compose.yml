@@ -15,6 +15,13 @@ services:
       - DEBUG=${DEBUG:-False}
       - DATABASE_URL=sqlite:///./shop.db
       - CORS_ORIGINS=https://${DOMAIN},https://www.${DOMAIN}
+      # Подтверждение почты (Brevo)
+      - BREVO_API_KEY=${BREVO_API_KEY:-}
+      - EMAIL_FROM=${EMAIL_FROM:-}
+      - EMAIL_FROM_NAME=${EMAIL_FROM_NAME:-FastAPI Shop}
+      # Подтверждение через Telegram
+      - TELEGRAM_INTERNAL_SECRET=${TELEGRAM_INTERNAL_SECRET:-}
+      - TELEGRAM_BOT_USERNAME=${TELEGRAM_BOT_USERNAME:-}
     expose:
       - "8000"
     restart: unless-stopped
@@ -32,6 +39,21 @@ services:
       - backend
     expose:
       - "80"
+    restart: unless-stopped
+    networks:
+      - fashop_network
+
+  telegram-bot:
+    build:
+      context: ./telegram-bot
+      dockerfile: Dockerfile
+    container_name: fashop_telegram_bot
+    depends_on:
+      - backend
+    environment:
+      - BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - BACKEND_URL=http://backend:8000
+      - INTERNAL_SECRET=${TELEGRAM_INTERNAL_SECRET}
     restart: unless-stopped
     networks:
       - fashop_network

@@ -14,3 +14,6 @@ class User(Base):
     is_verified = Column(Boolean, default=False, nullable=False, server_default="0")
     verification_code = Column(String, nullable=True)
     verification_code_expires_at = Column(DateTime, nullable=True)
+    # Подтверждение через Telegram
+    telegram_chat_id = Column(String, nullable=True)
+    link_token = Column(String, nullable=True, index=True)

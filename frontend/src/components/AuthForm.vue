@@ -135,8 +135,11 @@ async function handleSubmit() {
       router.push('/')
     } else {
       // После регистрации отправляем на экран ввода кода подтверждения
-      await authStore.register(email.value, password.value)
-      router.push({ name: 'verify', query: { email: email.value } })
+      const data = await authStore.register(email.value, password.value)
+      router.push({
+        name: 'verify',
+        query: { email: email.value, tg: data?.telegram_link || undefined },
+      })
     }
   } catch (err) {
     // Почта не подтверждена (403) — ведём на экран ввода кода

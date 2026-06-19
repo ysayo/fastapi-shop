@@ -5,6 +5,7 @@ from .config import settings
 from .database import init_db
 from .routes import products_router, categories_router, cart_router
 from .routes.auth import router as auth_router
+from .routes.internal import router as internal_router
 from .services.email_service import log_email_mode
 
 app = FastAPI(
@@ -28,6 +29,7 @@ app.include_router(products_router)
 app.include_router(categories_router)
 app.include_router(cart_router)
 app.include_router(auth_router)
+app.include_router(internal_router)
 
 @app.on_event('startup')
 def on_startup():

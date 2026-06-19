@@ -27,9 +27,30 @@ class AuthService:
             )
         hashed = hash_password(password)
         user = self.repo.create(email=email, hashed_password=hashed)
-        # Создаём и отправляем код подтверждения
+        # Токен для deep-link Telegram-бота
+        user.link_token = secrets.token_urlsafe(16)
+        # Создаём и отправляем код подтверждения на почту
         self._issue_code(user)
         return user
+
+    def link_telegram(self, token: str, chat_id: str) -> dict:
+        """
+        Вызывается ботом при /start <token>. Привязывает Telegram-чат к аккаунту
+        и возвращает свежий код подтверждения (бот отправляет его в чат).
+        """
+        user = self.repo.get_by_link_token(token)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid link token",
+            )
+        if user.is_verified:
+            return {"email": user.email, "code": None, "already_verified": True}
+
+        user.telegram_chat_id = str(chat_id)
+        code = self._set_code(user)
+        self.repo.save(user)
+        return {"email": user.email, "code": code, "already_verified": False}
 
     def verify_code(self, email: str, code: str) -> str:
         user = self.repo.get_by_email(email)
@@ -92,12 +113,17 @@ class AuthService:
             )
         return create_access_token(data={"sub": user.email})
 
-    def _issue_code(self, user: User) -> None:
-        """Сгенерировать новый код, сохранить и отправить письмо."""
+    def _set_code(self, user: User) -> str:
+        """Сгенерировать и записать (в объект) новый код подтверждения. Без сохранения в БД."""
         code = _generate_code()
         user.verification_code = code
         user.verification_code_expires_at = datetime.utcnow() + timedelta(
             minutes=settings.verification_code_ttl_minutes
         )
+        return code
+
+    def _issue_code(self, user: User) -> None:
+        """Сгенерировать новый код, сохранить и отправить письмо."""
+        code = self._set_code(user)
         self.repo.save(user)
         send_verification_email(user.email, code)

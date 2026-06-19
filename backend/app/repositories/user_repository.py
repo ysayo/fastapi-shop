@@ -8,6 +8,9 @@ class UserRepository:
     def get_by_email(self, email:str) -> User | None:
         return self.db.query(User).filter(User.email == email).first()
 
+    def get_by_link_token(self, token: str) -> User | None:
+        return self.db.query(User).filter(User.link_token == token).first()
+
     def create(self, email: str, hashed_password:str) -> User:
         user = User(email=email, hashed_password=hashed_password)
         self.db.add(user)

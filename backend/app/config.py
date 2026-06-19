@@ -26,6 +26,11 @@ class Settings(BaseSettings):
     email_from_name: str = "FastAPI Shop"
     verification_code_ttl_minutes: int = 15
 
+    # Подтверждение через Telegram-бота (отдельный сервис)
+    # Общий секрет защищает внутренний эндпоинт; username бота нужен для deep-link.
+    telegram_internal_secret: str = ""
+    telegram_bot_username: str = ""   # без @, например fashop_verify_bot
+
     class Config:
         env_file = ".env"
 

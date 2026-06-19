@@ -37,6 +37,8 @@ def _migrate_user_columns():
         "is_verified": "BOOLEAN NOT NULL DEFAULT 0",
         "verification_code": "VARCHAR",
         "verification_code_expires_at": "DATETIME",
+        "telegram_chat_id": "VARCHAR",
+        "link_token": "VARCHAR",
     }
     with engine.begin() as conn:
         for name, ddl in new_columns.items():

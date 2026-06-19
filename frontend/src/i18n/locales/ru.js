@@ -101,6 +101,8 @@ export default {
     didNotReceive: 'Не получили код?',
     resend: 'Отправить ещё раз',
     resent: 'Новый код отправлен на почту.',
+    or: 'или',
+    telegramButton: 'Получить код в Telegram',
   },
   footer: {
     rights: '© 2024 FastAPI Shop. Все права защищены.',
