@@ -1,0 +1,132 @@
+# ============================================================================
+#  CI/CD пайплайн для FastAPI Shop (GitLab CI)
+#
+#  Стадии:
+#    1. lint   — статические проверки фронтенда (ESLint) и бэкенда (компиляция)
+#    2. build  — сборка продакшен-бандла фронтенда (валидация Vite-сборки)
+#    3. deploy — ручной деплой на сервер по SSH (только из ветки по умолчанию)
+#
+#  Для стадии deploy нужно завести переменные CI/CD
+#  (Settings → CI/CD → Variables):
+#    SSH_PRIVATE_KEY  — приватный SSH-ключ для доступа к серверу (тип: File)
+#    SSH_HOST         — адрес сервера (например, 203.0.113.10 или example.com)
+#    SSH_USER         — пользователь на сервере (например, deploy)
+#    DEPLOY_PATH      — путь до репозитория на сервере (например, /srv/fastapi-shop)
+#    DOMAIN           — домен приложения (используется в ссылке на окружение)
+# ============================================================================
+
+stages:
+  - lint
+  - build
+  - deploy
+
+# Запускаем пайплайн для merge request'ов и обычных пушей в ветки,
+# но не создаём дублирующие пайплайны для веток с открытым MR.
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
+variables:
+  # Кэш npm внутри рабочей директории проекта, чтобы GitLab мог его сохранять
+  npm_config_cache: "$CI_PROJECT_DIR/.cache/npm"
+
+# --- Переиспользуемые настройки кэша node_modules ---------------------------
+.frontend_cache: &frontend_cache
+  key:
+    files:
+      - frontend/package-lock.json
+  paths:
+    - frontend/node_modules/
+    - .cache/npm/
+
+# ============================================================================
+#  LINT
+# ============================================================================
+
+lint:frontend:
+  stage: lint
+  image: node:20-alpine
+  cache:
+    <<: *frontend_cache
+    policy: pull-push
+  script:
+    - cd frontend
+    - npm ci --prefer-offline --no-audit --no-fund
+    - npx eslint .
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - frontend/**/*
+    - if: $CI_COMMIT_BRANCH
+
+lint:backend:
+  stage: lint
+  image: python:3.11-slim
+  script:
+    # Проверяем, что весь пакет компилируется (синтаксис, отступы и т.п.)
+    - cd backend
+    - python -m compileall -q app
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - backend/**/*
+    - if: $CI_COMMIT_BRANCH
+
+# ============================================================================
+#  BUILD
+# ============================================================================
+
+build:frontend:
+  stage: build
+  image: node:20-alpine
+  cache:
+    <<: *frontend_cache
+    policy: pull
+  script:
+    - cd frontend
+    - npm ci --prefer-offline --no-audit --no-fund
+    - npm run build
+  artifacts:
+    name: "frontend-dist-$CI_COMMIT_SHORT_SHA"
+    paths:
+      - frontend/dist/
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - frontend/**/*
+    - if: $CI_COMMIT_BRANCH
+
+# ============================================================================
+#  DEPLOY (вручную, только из ветки по умолчанию)
+# ============================================================================
+
+deploy:production:
+  stage: deploy
+  image: alpine:3.20
+  environment:
+    name: production
+    url: https://$DOMAIN
+  before_script:
+    - apk add --no-cache openssh-client
+    - eval "$(ssh-agent -s)"
+    - chmod 600 "$SSH_PRIVATE_KEY"
+    - ssh-add "$SSH_PRIVATE_KEY"
+    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+    - ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+  script:
+    # Подтягиваем свежий код и пересобираем контейнеры на сервере
+    - >
+      ssh "$SSH_USER@$SSH_HOST"
+      "cd '$DEPLOY_PATH'
+      && git pull origin '$CI_DEFAULT_BRANCH'
+      && docker compose up -d --build
+      && docker image prune -f"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
+  # Деплой не должен блокировать пайплайн, если его не запускают вручную
+  allow_failure: false
