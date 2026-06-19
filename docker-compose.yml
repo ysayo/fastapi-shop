@@ -22,6 +22,8 @@ services:
       # Подтверждение через Telegram
       - TELEGRAM_INTERNAL_SECRET=${TELEGRAM_INTERNAL_SECRET:-}
       - TELEGRAM_BOT_USERNAME=${TELEGRAM_BOT_USERNAME:-}
+      # Тот же токен, что у сервиса telegram-bot — нужен backend'у для push-отправки кода
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
     expose:
       - "8000"
     restart: unless-stopped

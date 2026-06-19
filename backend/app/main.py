@@ -7,6 +7,7 @@ from .routes import products_router, categories_router, cart_router
 from .routes.auth import router as auth_router
 from .routes.internal import router as internal_router
 from .services.email_service import log_email_mode
+from .services.telegram_service import log_telegram_mode
 
 app = FastAPI(
     title=settings.app_name,
@@ -35,6 +36,7 @@ app.include_router(internal_router)
 def on_startup():
     init_db()
     log_email_mode()
+    log_telegram_mode()
 
 @app.get('/')
 def root():

@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     # Общий секрет защищает внутренний эндпоинт; username бота нужен для deep-link.
     telegram_internal_secret: str = ""
     telegram_bot_username: str = ""   # без @, например fashop_verify_bot
+    # Токен бота нужен backend'у, чтобы САМОМУ слать код в привязанный чат (push).
+    # Тот же токен, что у сервиса telegram-bot. Если пуст — push отключён.
+    telegram_bot_token: str = ""
 
     class Config:
         env_file = ".env"

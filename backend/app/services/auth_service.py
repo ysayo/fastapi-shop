@@ -7,6 +7,7 @@ from ..core.security import hash_password, verify_password, create_access_token
 from ..config import settings
 from ..models.user import User
 from .email_service import send_verification_email
+from .telegram_service import send_telegram_code
 
 
 def _generate_code() -> str:
@@ -107,6 +108,9 @@ class AuthService:
                 headers={"WWW-Authenticate": "Bearer"},
             )
         if not user.is_verified:
+            # Каждая попытка входа неподтверждённого аккаунта заново выдаёт код
+            # и шлёт его в Telegram (если чат привязан) либо на почту/в консоль.
+            self._issue_code(user)
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Email not verified",
@@ -123,7 +127,16 @@ class AuthService:
         return code
 
     def _issue_code(self, user: User) -> None:
-        """Сгенерировать новый код, сохранить и отправить письмо."""
+        """Сгенерировать новый код, сохранить и доставить пользователю."""
         code = self._set_code(user)
         self.repo.save(user)
+        self._deliver_code(user, code)
+
+    def _deliver_code(self, user: User, code: str) -> None:
+        """
+        Доставить код пользователю по приоритетному каналу:
+        сначала Telegram (если чат привязан и push настроен), иначе — почта/консоль.
+        """
+        if user.telegram_chat_id and send_telegram_code(user.telegram_chat_id, code):
+            return
         send_verification_email(user.email, code)
