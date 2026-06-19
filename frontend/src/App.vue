@@ -5,19 +5,36 @@
 -->
 
 <template>
-  <div id="app" class="min-h-screen bg-gray-50">
+  <div id="app" class="min-h-screen flex flex-col bg-ink-50 text-ink-900">
     <!-- Шапка сайта -->
     <Header />
 
     <!-- Основной контент (роутер) -->
-    <RouterView />
+    <main class="flex-1">
+      <RouterView />
+    </main>
 
     <!-- Футер -->
-    <footer class="bg-white border-t-2 border-black mt-16">
-      <div class="max-w-7xl mx-auto px-4 py-8">
-        <div class="text-center text-gray-600">
-          <p class="mb-2">{{ t('footer.rights') }}</p>
-          <p class="text-sm">{{ t('footer.builtWith') }}</p>
+    <footer class="mt-20 border-t border-ink-200 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="flex items-center gap-2">
+            <span
+              class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-glow"
+            >
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+            </span>
+            <span class="text-lg font-bold text-ink-900">FastAPI Shop</span>
+          </div>
+          <p class="text-ink-600">{{ t('footer.rights') }}</p>
+          <p class="text-sm text-ink-400">{{ t('footer.builtWith') }}</p>
         </div>
       </div>
     </footer>

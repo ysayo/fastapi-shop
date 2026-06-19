@@ -5,16 +5,16 @@
 -->
 
 <template>
-  <div class="min-h-screen bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <!-- Кнопка "Назад" -->
       <button
         @click="router.push('/')"
-        class="flex items-center text-gray-600 hover:text-black transition-colors mb-8 font-medium text-lg"
+        class="group mb-8 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-ink-500 transition-colors hover:bg-ink-100 hover:text-ink-900"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 mr-2"
+          class="h-5 w-5 transition-transform group-hover:-translate-x-0.5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -30,17 +30,20 @@
       </button>
 
       <!-- Состояние загрузки -->
-      <div v-if="loading" class="text-center py-16">
-        <div class="inline-block animate-spin rounded-full h-14 w-14 border-b-4 border-black"></div>
-        <p class="mt-4 text-lg text-gray-500">{{ t('product.loading') }}</p>
+      <div v-if="loading" class="flex flex-col items-center py-20">
+        <div class="h-14 w-14 animate-spin rounded-full border-4 border-ink-200 border-t-brand-600"></div>
+        <p class="mt-4 text-lg text-ink-500">{{ t('product.loading') }}</p>
       </div>
 
       <!-- Ошибка -->
-      <div v-else-if="error" class="text-center py-16">
-        <p class="text-red-600 text-lg font-medium">{{ error }}</p>
+      <div
+        v-else-if="error"
+        class="rounded-2xl border border-red-100 bg-red-50 py-16 text-center"
+      >
+        <p class="text-lg font-medium text-red-600">{{ error }}</p>
         <button
           @click="router.push('/')"
-          class="mt-6 bg-black text-white py-3 px-8 text-lg font-semibold rounded-none hover:bg-gray-900 transition-colors"
+          class="mt-6 inline-flex items-center rounded-xl bg-gradient-to-br from-brand-600 to-brand-700 py-3 px-8 text-base font-semibold text-white shadow-glow transition-all hover:from-brand-500 hover:to-brand-600"
         >
           {{ t('product.returnToCatalog') }}
         </button>
@@ -49,51 +52,72 @@
       <!-- Детальная информация о товаре -->
       <div
         v-else-if="product"
-        class="bg-white border-2 border-gray-100 rounded-none shadow-sm overflow-hidden"
+        class="overflow-hidden rounded-3xl border border-ink-200/70 bg-white shadow-soft"
       >
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2">
           <!-- Изображение -->
-          <div class="aspect-square overflow-hidden rounded-none bg-gray-50">
+          <div class="aspect-square overflow-hidden bg-ink-100">
             <img
               :src="product.image_url"
               :alt="product.name"
-              class="w-full h-full object-cover"
+              class="h-full w-full object-cover"
               @error="handleImageError"
             />
           </div>
 
           <!-- Информация -->
-          <div class="flex flex-col">
+          <div class="flex flex-col p-8 sm:p-10">
             <!-- Категория -->
-            <div class="text-sm text-gray-500 uppercase tracking-wider mb-3 font-medium">
-              {{ categoryName(product.category) }}
+            <div>
+              <span
+                class="inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-700"
+              >
+                {{ categoryName(product.category) }}
+              </span>
             </div>
 
             <!-- Название -->
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-black mb-4">
+            <h1 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-ink-900">
               {{ product.name }}
             </h1>
 
             <!-- Цена -->
-            <div class="text-2xl sm:text-3xl font-bold text-black mb-6">
+            <div class="mt-4 text-3xl font-extrabold tracking-tight text-ink-900">
               ${{ product.price.toFixed(2) }}
             </div>
 
             <!-- Описание -->
-            <div class="mb-8">
-              <h2 class="text-xl font-bold text-black mb-3">{{ t('product.description') }}</h2>
-              <p class="text-gray-600 leading-relaxed">
+            <div class="mt-8">
+              <h2 class="mb-2 text-sm font-bold uppercase tracking-wide text-ink-400">
+                {{ t('product.description') }}
+              </h2>
+              <p class="leading-relaxed text-ink-600">
                 {{ product.description || t('product.noDescription') }}
               </p>
             </div>
 
             <!-- Кнопка добавления в корзину -->
-            <div class="mt-auto">
+            <div class="mt-8">
               <button
                 @click="handleAddToCart"
                 :disabled="adding"
-                class="w-full bg-black text-white py-4 px-6 text-lg font-semibold rounded-none hover:bg-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-brand-600 to-brand-700 py-4 px-6 text-base font-semibold text-white shadow-glow transition-all hover:from-brand-500 hover:to-brand-600 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
               >
+                <svg
+                  v-if="!adding"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
                 {{ adding ? t('product.addingToCart') : t('product.addToCart') }}
               </button>
 
@@ -101,17 +125,20 @@
               <transition name="fade">
                 <div
                   v-if="showNotification"
-                  class="mt-4 bg-black text-white px-4 py-3 rounded-none text-center font-medium"
+                  class="mt-4 flex items-center justify-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-center font-medium text-emerald-700"
                 >
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
                   {{ t('product.addedNotification') }}
                 </div>
               </transition>
             </div>
 
             <!-- Дополнительная информация -->
-            <div class="mt-8 pt-6 border-t-2 border-gray-100">
-              <p class="text-sm text-gray-500">{{ t('product.id', { id: product.id }) }}</p>
-              <p class="text-sm text-gray-500">{{ t('product.added', { date: formatDate(product.created_at) }) }}</p>
+            <div class="mt-8 space-y-1 border-t border-ink-200 pt-6">
+              <p class="text-sm text-ink-400">{{ t('product.id', { id: product.id }) }}</p>
+              <p class="text-sm text-ink-400">{{ t('product.added', { date: formatDate(product.created_at) }) }}</p>
             </div>
           </div>
         </div>

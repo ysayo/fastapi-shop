@@ -5,25 +5,28 @@
 -->
 
 <template>
-  <div class="bg-white border-2 border-gray-200 rounded-lg p-6">
-    <h2 class="text-2xl font-bold text-black mb-6">{{ t('categories.title') }}</h2>
+  <div class="rounded-2xl border border-ink-200/70 bg-white p-6 shadow-soft lg:sticky lg:top-24">
+    <h2 class="mb-5 text-lg font-bold text-ink-900">{{ t('categories.title') }}</h2>
 
     <!-- Список категорий -->
-    <ul class="space-y-2">
+    <ul class="space-y-1.5">
       <!-- Все категории -->
       <li>
         <button
           @click="selectCategory(null)"
           :class="[
-            'w-full text-left px-4 py-3 rounded-lg transition-all duration-200',
+            'flex w-full items-center justify-between rounded-xl px-4 py-2.5 text-sm transition-all duration-200',
             !productsStore.selectedCategory
-              ? 'bg-black text-white font-semibold'
-              : 'bg-gray-50 hover:bg-gray-100 text-gray-700',
+              ? 'bg-gradient-to-br from-brand-600 to-brand-700 font-semibold text-white shadow-glow'
+              : 'font-medium text-ink-600 hover:bg-ink-100 hover:text-ink-900',
           ]"
         >
-          {{ t('categories.all') }}
-          <span v-if="!productsStore.selectedCategory" class="float-right">
-            ({{ totalProductsCount }})
+          <span>{{ t('categories.all') }}</span>
+          <span
+            v-if="!productsStore.selectedCategory"
+            class="rounded-full bg-white/20 px-2 py-0.5 text-xs"
+          >
+            {{ totalProductsCount }}
           </span>
         </button>
       </li>
@@ -33,15 +36,18 @@
         <button
           @click="selectCategory(category.id)"
           :class="[
-            'w-full text-left px-4 py-3 rounded-lg transition-all duration-200',
+            'flex w-full items-center justify-between rounded-xl px-4 py-2.5 text-sm transition-all duration-200',
             productsStore.selectedCategory === category.id
-              ? 'bg-black text-white font-semibold'
-              : 'bg-gray-50 hover:bg-gray-100 text-gray-700',
+              ? 'bg-gradient-to-br from-brand-600 to-brand-700 font-semibold text-white shadow-glow'
+              : 'font-medium text-ink-600 hover:bg-ink-100 hover:text-ink-900',
           ]"
         >
-          {{ categoryName(category) }}
-          <span v-if="productsStore.selectedCategory === category.id" class="float-right">
-            ({{ productsStore.productsCount }})
+          <span>{{ categoryName(category) }}</span>
+          <span
+            v-if="productsStore.selectedCategory === category.id"
+            class="rounded-full bg-white/20 px-2 py-0.5 text-xs"
+          >
+            {{ productsStore.productsCount }}
           </span>
         </button>
       </li>

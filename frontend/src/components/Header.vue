@@ -5,44 +5,15 @@
 -->
 
 <template>
-  <header class="bg-white border-b-2 border-black sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4">
+  <header
+    class="sticky top-0 z-50 border-b border-ink-200/70 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
         <!-- Логотип -->
-        <router-link to="/" class="flex items-center space-x-2 group">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-8 w-8 group-hover:scale-110 transition-transform"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-            />
-          </svg>
-          <span class="text-2xl font-bold text-black">FastAPI Shop</span>
-        </router-link>
-
-        <!-- Навигация -->
-        <nav class="flex items-center space-x-8">
-          <!-- Ссылка на каталог -->
-          <router-link
-            to="/"
-            class="text-gray-700 hover:text-black transition-colors font-medium"
-            active-class="text-black font-semibold"
-          >
-            {{ t('nav.catalog') }}
-          </router-link>
-
-          <!-- Корзина -->
-          <router-link
-            to="/cart"
-            class="relative flex items-center space-x-2 text-gray-700 hover:text-black transition-colors font-medium"
-            active-class="text-black font-semibold"
+        <router-link to="/" class="flex items-center gap-2.5 group">
+          <span
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-glow transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -58,22 +29,59 @@
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
-            <span>{{ t('nav.cart') }}</span>
+          </span>
+          <span class="hidden sm:inline text-xl font-extrabold tracking-tight text-ink-900 whitespace-nowrap">FastAPI Shop</span>
+        </router-link>
+
+        <!-- Навигация -->
+        <nav class="flex items-center gap-2 sm:gap-4">
+          <!-- Ссылка на каталог -->
+          <router-link
+            to="/"
+            class="hidden sm:inline-flex rounded-lg px-3 py-2 text-sm font-medium text-ink-600 hover:bg-ink-100 hover:text-ink-900 transition-colors"
+            active-class="!text-brand-700 !bg-brand-50"
+          >
+            {{ t('nav.catalog') }}
+          </router-link>
+
+          <!-- Корзина -->
+          <router-link
+            to="/cart"
+            class="relative inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-ink-600 hover:bg-ink-100 hover:text-ink-900 transition-colors"
+            active-class="!text-brand-700 !bg-brand-50"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+            <span class="hidden sm:inline">{{ t('nav.cart') }}</span>
 
             <!-- Счетчик товаров -->
             <span
               v-if="cartStore.itemsCount > 0"
-              class="absolute -top-2 -right-2 bg-black text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+              class="absolute -top-1 -right-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-brand-700 px-1 text-xs font-bold text-white shadow-glow"
             >
               {{ cartStore.itemsCount }}
             </span>
           </router-link>
 
+          <span class="hidden sm:block h-6 w-px bg-ink-200"></span>
+
           <!-- Аккаунт: вход/регистрация или email + выход -->
           <template v-if="authStore.isAuthenticated">
-            <span class="text-gray-700 font-medium hidden sm:inline">{{ authStore.email }}</span>
+            <span class="hidden lg:inline text-sm font-medium text-ink-500">{{ authStore.email }}</span>
             <button
-              class="border-2 border-black text-black px-4 py-2 rounded-md font-semibold hover:bg-black hover:text-white transition-colors"
+              class="inline-flex items-center rounded-lg border border-ink-200 px-4 py-2 text-sm font-semibold text-ink-700 hover:border-ink-300 hover:bg-ink-50 transition-colors"
               @click="authStore.logout()"
             >
               {{ t('nav.logout') }}
@@ -82,7 +90,7 @@
           <router-link
             v-else
             to="/login"
-            class="flex items-center space-x-2 bg-black text-white px-4 py-2 rounded-md font-semibold hover:bg-gray-800 transition-colors"
+            class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-brand-600 to-brand-700 px-4 py-2 text-sm font-semibold text-white shadow-glow hover:from-brand-500 hover:to-brand-600 transition-all hover:-translate-y-0.5"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

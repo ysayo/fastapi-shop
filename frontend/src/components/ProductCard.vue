@@ -6,49 +6,75 @@
 
 <template>
   <div
-    class="bg-white border-2 border-gray-200 rounded-lg overflow-hidden hover:border-black transition-all duration-300 hover:shadow-lg"
+    class="group flex flex-col overflow-hidden rounded-2xl border border-ink-200/70 bg-white shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card hover:border-brand-200"
   >
     <!-- Изображение товара -->
-    <router-link :to="`/product/${product.id}`">
-      <div class="aspect-square overflow-hidden bg-gray-100">
+    <router-link :to="`/product/${product.id}`" class="relative block">
+      <div class="aspect-square overflow-hidden bg-ink-100">
         <img
           :src="product.image_url"
           :alt="product.name"
-          class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
           @error="handleImageError"
         />
       </div>
+      <!-- Категория -->
+      <span
+        class="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-brand-700 shadow-sm backdrop-blur"
+      >
+        {{ categoryName(product.category) }}
+      </span>
     </router-link>
 
     <!-- Информация о товаре -->
-    <div class="p-4">
-      <!-- Категория -->
-      <div class="text-xs text-gray-500 uppercase tracking-wide mb-2">
-        {{ categoryName(product.category) }}
-      </div>
-
+    <div class="flex flex-1 flex-col p-5">
       <!-- Название товара -->
       <router-link :to="`/product/${product.id}`">
-        <h3 class="text-lg font-semibold text-black mb-2 hover:text-gray-700 transition-colors">
+        <h3
+          class="mb-3 line-clamp-2 text-base font-semibold text-ink-900 transition-colors group-hover:text-brand-700"
+        >
           {{ product.name }}
         </h3>
       </router-link>
 
       <!-- Цена -->
-      <p class="text-2xl font-bold text-black mb-4">${{ product.price.toFixed(2) }}</p>
+      <p class="mb-4 mt-auto text-2xl font-extrabold tracking-tight text-ink-900">
+        ${{ product.price.toFixed(2) }}
+      </p>
 
       <!-- Кнопка добавления в корзину -->
       <button
         @click="handleAddToCart"
         :disabled="adding"
-        class="w-full bg-black text-white py-3 px-4 rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+        class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-brand-600 to-brand-700 py-3 px-4 text-sm font-semibold text-white shadow-glow transition-all hover:from-brand-500 hover:to-brand-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
       >
+        <svg
+          v-if="!adding"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+          />
+        </svg>
         {{ adding ? t('product.adding') : t('product.addToCart') }}
       </button>
 
       <!-- Уведомление об успешном добавлении -->
       <transition name="fade">
-        <div v-if="showNotification" class="mt-2 text-sm text-green-600 text-center font-medium">
+        <div
+          v-if="showNotification"
+          class="mt-3 flex items-center justify-center gap-1.5 text-sm font-medium text-emerald-600"
+        >
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
           {{ t('product.addedToCart') }}
         </div>
       </transition>

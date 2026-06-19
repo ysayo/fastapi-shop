@@ -5,28 +5,48 @@
 -->
 
 <template>
-  <div class="min-h-screen bg-white flex items-center justify-center px-4 py-12">
-    <div class="w-full max-w-md">
+  <div class="relative flex min-h-[calc(100vh-5rem)] items-center justify-center overflow-hidden px-4 py-12">
+    <!-- Декоративный фон -->
+    <div
+      class="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-brand-200/40 blur-3xl"
+    ></div>
+
+    <div class="relative w-full max-w-md">
       <!-- Заголовок -->
       <div class="mb-8 text-center">
-        <h1 class="text-3xl font-extrabold text-black mb-2">
+        <div
+          class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-glow"
+        >
+          <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
+          </svg>
+        </div>
+        <h1 class="text-2xl font-extrabold tracking-tight text-ink-900 mb-1">
           {{ isLogin ? t('auth.signInTitle') : t('auth.signUpTitle') }}
         </h1>
-        <p class="text-gray-500">
+        <p class="text-ink-500">
           {{ isLogin ? t('auth.signInWelcome') : t('auth.signUpWelcome') }}
         </p>
       </div>
 
       <!-- Форма -->
-      <form class="space-y-4 border-2 border-black rounded-lg p-8" @submit.prevent="handleSubmit">
+      <form
+        class="space-y-4 rounded-2xl border border-ink-200/70 bg-white p-8 shadow-card"
+        @submit.prevent="handleSubmit"
+      >
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('auth.email') }}</label>
+          <label class="mb-1.5 block text-sm font-medium text-ink-700">{{ t('auth.email') }}</label>
           <input
             v-model="email"
             type="email"
             required
             autocomplete="email"
-            class="w-full border-2 border-gray-300 rounded-md px-3 py-2 text-black placeholder-gray-400 focus:border-black focus:outline-none"
+            class="w-full rounded-xl border border-ink-200 bg-ink-50 px-3.5 py-2.5 text-ink-900 placeholder-ink-400 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-100"
             placeholder="you@example.com"
           />
         </div>
@@ -46,35 +66,40 @@
             autocomplete="new-password"
           />
           <!-- Подсказка о несовпадении паролей -->
-          <p v-if="passwordsMismatch" class="mt-1 text-sm text-red-600">
+          <p v-if="passwordsMismatch" class="mt-1.5 text-sm text-red-600">
             {{ t('auth.passwordsDontMatch') }}
           </p>
         </div>
 
         <!-- Сообщение об ошибке -->
-        <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
+        <p
+          v-if="error"
+          class="rounded-xl bg-red-50 px-3.5 py-2.5 text-sm font-medium text-red-600"
+        >
+          {{ error }}
+        </p>
 
         <!-- Кнопка отправки -->
         <button
           type="submit"
           :disabled="loading || passwordsMismatch"
-          class="w-full bg-black text-white font-semibold py-2.5 rounded-md hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full rounded-xl bg-gradient-to-br from-brand-600 to-brand-700 py-3 font-semibold text-white shadow-glow transition-all hover:from-brand-500 hover:to-brand-600 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {{ loading ? t('auth.pleaseWait') : isLogin ? t('auth.signInButton') : t('auth.createAccount') }}
         </button>
       </form>
 
       <!-- Перекрёстная ссылка на второй режим -->
-      <p class="text-center text-sm text-gray-600 mt-6">
+      <p class="mt-6 text-center text-sm text-ink-500">
         <template v-if="isLogin">
           {{ t('auth.noAccount') }}
-          <router-link to="/register" class="text-black font-semibold hover:underline ml-1">
+          <router-link to="/register" class="ml-1 font-semibold text-brand-700 hover:underline">
             {{ t('auth.register') }}
           </router-link>
         </template>
         <template v-else>
           {{ t('auth.haveAccount') }}
-          <router-link to="/login" class="text-black font-semibold hover:underline ml-1">
+          <router-link to="/login" class="ml-1 font-semibold text-brand-700 hover:underline">
             {{ t('auth.login') }}
           </router-link>
         </template>
