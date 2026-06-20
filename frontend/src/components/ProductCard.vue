@@ -6,11 +6,11 @@
 
 <template>
   <div
-    class="group flex flex-col overflow-hidden rounded-2xl border border-ink-200/70 bg-white shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card hover:border-brand-200"
+    class="group flex flex-col overflow-hidden rounded-2xl border border-ink-200/70 bg-white shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card hover:border-brand-200 dark:border-ink-800 dark:bg-ink-900 dark:hover:border-brand-500/50"
   >
     <!-- Изображение товара -->
     <router-link :to="`/product/${product.id}`" class="relative block">
-      <div class="aspect-square overflow-hidden bg-ink-100">
+      <div class="aspect-square overflow-hidden bg-ink-100 dark:bg-ink-800">
         <img
           :src="product.image_url"
           :alt="product.name"
@@ -20,7 +20,7 @@
       </div>
       <!-- Категория -->
       <span
-        class="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-brand-700 shadow-sm backdrop-blur"
+        class="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-brand-700 shadow-sm backdrop-blur dark:bg-ink-900/80 dark:text-brand-300"
       >
         {{ categoryName(product.category) }}
       </span>
@@ -31,14 +31,14 @@
       <!-- Название товара -->
       <router-link :to="`/product/${product.id}`">
         <h3
-          class="mb-3 line-clamp-2 text-base font-semibold text-ink-900 transition-colors group-hover:text-brand-700"
+          class="mb-3 line-clamp-2 text-base font-semibold text-ink-900 transition-colors group-hover:text-brand-700 dark:text-ink-50 dark:group-hover:text-brand-300"
         >
           {{ product.name }}
         </h3>
       </router-link>
 
       <!-- Цена -->
-      <p class="mb-4 mt-auto text-2xl font-extrabold tracking-tight text-ink-900">
+      <p class="mb-4 mt-auto text-2xl font-extrabold tracking-tight text-ink-900 dark:text-ink-50">
         ${{ product.price.toFixed(2) }}
       </p>
 

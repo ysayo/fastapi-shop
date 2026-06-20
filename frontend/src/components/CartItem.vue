@@ -6,11 +6,11 @@
 
 <template>
   <div
-    class="rounded-2xl border border-ink-200/70 bg-white p-5 shadow-soft transition-all hover:shadow-card"
+    class="rounded-2xl border border-ink-200/70 bg-white p-5 shadow-soft transition-all hover:shadow-card dark:border-ink-800 dark:bg-ink-900"
   >
     <div class="flex gap-5">
       <!-- Изображение товара -->
-      <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl bg-ink-100">
+      <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl bg-ink-100 dark:bg-ink-800">
         <img
           :src="item.image_url"
           :alt="item.name"
@@ -21,18 +21,18 @@
 
       <!-- Информация о товаре -->
       <div class="flex-grow">
-        <h3 class="text-base font-semibold text-ink-900 mb-1">
+        <h3 class="text-base font-semibold text-ink-900 dark:text-ink-50 mb-1">
           {{ item.name }}
         </h3>
-        <p class="text-sm text-ink-500 mb-3">${{ item.price.toFixed(2) }} {{ t('cart.each') }}</p>
+        <p class="text-sm text-ink-500 dark:text-ink-400 mb-3">${{ item.price.toFixed(2) }} {{ t('cart.each') }}</p>
 
         <!-- Управление количеством -->
         <div class="flex items-center gap-4">
-          <div class="flex items-center rounded-xl border border-ink-200 text-ink-700">
+          <div class="flex items-center rounded-xl border border-ink-200 text-ink-700 dark:border-ink-700 dark:text-ink-200">
             <button
               @click="decreaseQuantity"
               :disabled="updating"
-              class="rounded-l-xl px-2.5 py-2 hover:bg-ink-100 transition-colors disabled:opacity-50"
+              class="rounded-l-xl px-2.5 py-2 hover:bg-ink-100 transition-colors disabled:opacity-50 dark:hover:bg-ink-800"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -50,14 +50,14 @@
               </svg>
             </button>
 
-            <span class="px-4 py-2 font-semibold min-w-[44px] text-center text-ink-900">
+            <span class="px-4 py-2 font-semibold min-w-[44px] text-center text-ink-900 dark:text-ink-50">
               {{ item.quantity }}
             </span>
 
             <button
               @click="increaseQuantity"
               :disabled="updating"
-              class="rounded-r-xl px-2.5 py-2 hover:bg-ink-100 transition-colors disabled:opacity-50"
+              class="rounded-r-xl px-2.5 py-2 hover:bg-ink-100 transition-colors disabled:opacity-50 dark:hover:bg-ink-800"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +80,7 @@
           <button
             @click="handleRemove"
             :disabled="updating"
-            class="rounded-lg p-2 text-ink-400 transition-colors hover:bg-red-50 hover:text-red-500 disabled:opacity-50"
+            class="rounded-lg p-2 text-ink-400 transition-colors hover:bg-red-50 hover:text-red-500 disabled:opacity-50 dark:text-ink-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +102,7 @@
 
       <!-- Сумма -->
       <div class="text-right">
-        <p class="text-lg font-extrabold tracking-tight text-ink-900">${{ item.subtotal.toFixed(2) }}</p>
+        <p class="text-lg font-extrabold tracking-tight text-ink-900 dark:text-ink-50">${{ item.subtotal.toFixed(2) }}</p>
       </div>
     </div>
   </div>

@@ -5,8 +5,8 @@
 -->
 
 <template>
-  <div class="rounded-2xl border border-ink-200/70 bg-white p-6 shadow-soft lg:sticky lg:top-24">
-    <h2 class="mb-5 text-lg font-bold text-ink-900">{{ t('categories.title') }}</h2>
+  <div class="rounded-2xl border border-ink-200/70 bg-white p-6 shadow-soft lg:sticky lg:top-24 dark:border-ink-800 dark:bg-ink-900">
+    <h2 class="mb-5 text-lg font-bold text-ink-900 dark:text-ink-50">{{ t('categories.title') }}</h2>
 
     <!-- Список категорий -->
     <ul class="space-y-1.5">
@@ -18,7 +18,7 @@
             'flex w-full items-center justify-between rounded-xl px-4 py-2.5 text-sm transition-all duration-200',
             !productsStore.selectedCategory
               ? 'bg-gradient-to-br from-brand-600 to-brand-700 font-semibold text-white shadow-glow'
-              : 'font-medium text-ink-600 hover:bg-ink-100 hover:text-ink-900',
+              : 'font-medium text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50',
           ]"
         >
           <span>{{ t('categories.all') }}</span>
@@ -39,7 +39,7 @@
             'flex w-full items-center justify-between rounded-xl px-4 py-2.5 text-sm transition-all duration-200',
             productsStore.selectedCategory === category.id
               ? 'bg-gradient-to-br from-brand-600 to-brand-700 font-semibold text-white shadow-glow'
-              : 'font-medium text-ink-600 hover:bg-ink-100 hover:text-ink-900',
+              : 'font-medium text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50',
           ]"
         >
           <span>{{ categoryName(category) }}</span>

@@ -26,20 +26,20 @@
             />
           </svg>
         </div>
-        <h1 class="text-2xl font-extrabold tracking-tight text-ink-900 mb-1">{{ t('verify.title') }}</h1>
-        <p class="text-ink-500">
+        <h1 class="text-2xl font-extrabold tracking-tight text-ink-900 dark:text-ink-50 mb-1">{{ t('verify.title') }}</h1>
+        <p class="text-ink-500 dark:text-ink-400">
           {{ t('verify.subtitle') }}
-          <span class="font-semibold text-ink-900">{{ email }}</span>
+          <span class="font-semibold text-ink-900 dark:text-ink-100">{{ email }}</span>
         </p>
       </div>
 
       <!-- Форма -->
       <form
-        class="space-y-4 rounded-2xl border border-ink-200/70 bg-white p-8 shadow-card"
+        class="space-y-4 rounded-2xl border border-ink-200/70 bg-white p-8 shadow-card dark:border-ink-800 dark:bg-ink-900"
         @submit.prevent="handleVerify"
       >
         <div>
-          <label class="mb-1.5 block text-sm font-medium text-ink-700">{{ t('verify.codeLabel') }}</label>
+          <label class="mb-1.5 block text-sm font-medium text-ink-700 dark:text-ink-200">{{ t('verify.codeLabel') }}</label>
           <input
             v-model="code"
             type="text"
@@ -47,7 +47,7 @@
             maxlength="6"
             required
             autocomplete="one-time-code"
-            class="w-full rounded-xl border border-ink-200 bg-ink-50 px-3.5 py-3 text-center text-2xl font-semibold tracking-[0.5em] text-ink-900 placeholder-ink-300 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-100"
+            class="w-full rounded-xl border border-ink-200 bg-ink-50 px-3.5 py-3 text-center text-2xl font-semibold tracking-[0.5em] text-ink-900 placeholder-ink-300 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-100 dark:border-ink-700 dark:bg-ink-800 dark:text-ink-50 dark:placeholder-ink-600 dark:focus:bg-ink-800 dark:focus:ring-brand-500/20"
             placeholder="------"
           />
         </div>
@@ -55,7 +55,7 @@
         <!-- Сообщение об ошибке -->
         <p
           v-if="error"
-          class="rounded-xl bg-red-50 px-3.5 py-2.5 text-sm font-medium text-red-600"
+          class="rounded-xl bg-red-50 px-3.5 py-2.5 text-sm font-medium text-red-600 dark:bg-red-500/10 dark:text-red-400"
         >
           {{ error }}
         </p>
@@ -63,7 +63,7 @@
         <!-- Сообщение об успешной повторной отправке -->
         <p
           v-if="resentMessage"
-          class="rounded-xl bg-emerald-50 px-3.5 py-2.5 text-sm font-medium text-emerald-700"
+          class="rounded-xl bg-emerald-50 px-3.5 py-2.5 text-sm font-medium text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400"
         >
           {{ resentMessage }}
         </p>
@@ -81,15 +81,15 @@
       <!-- Альтернатива: получить код в Telegram (если бот настроен) -->
       <div v-if="telegramLink" class="mt-6">
         <div class="mb-4 flex items-center gap-3">
-          <span class="flex-grow border-t border-ink-200"></span>
-          <span class="text-sm text-ink-400">{{ t('verify.or') }}</span>
-          <span class="flex-grow border-t border-ink-200"></span>
+          <span class="flex-grow border-t border-ink-200 dark:border-ink-800"></span>
+          <span class="text-sm text-ink-400 dark:text-ink-500">{{ t('verify.or') }}</span>
+          <span class="flex-grow border-t border-ink-200 dark:border-ink-800"></span>
         </div>
         <a
           :href="telegramLink"
           target="_blank"
           rel="noopener"
-          class="flex w-full items-center justify-center gap-2 rounded-xl border border-ink-200 bg-white py-3 font-semibold text-ink-700 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
+          class="flex w-full items-center justify-center gap-2 rounded-xl border border-ink-200 bg-white py-3 font-semibold text-ink-700 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 dark:border-ink-700 dark:bg-ink-800 dark:text-ink-200 dark:hover:border-brand-500/40 dark:hover:bg-brand-500/10 dark:hover:text-brand-300"
         >
           <svg class="h-5 w-5 text-[#229ED9]" viewBox="0 0 24 24" fill="currentColor">
             <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z" />
@@ -99,10 +99,10 @@
       </div>
 
       <!-- Повторная отправка кода -->
-      <p class="mt-6 text-center text-sm text-ink-500">
+      <p class="mt-6 text-center text-sm text-ink-500 dark:text-ink-400">
         {{ t('verify.didNotReceive') }}
         <button
-          class="ml-1 font-semibold text-brand-700 hover:underline disabled:opacity-50"
+          class="ml-1 font-semibold text-brand-700 hover:underline disabled:opacity-50 dark:text-brand-300"
           :disabled="resending"
           @click="handleResend"
         >

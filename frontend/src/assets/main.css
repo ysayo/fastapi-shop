@@ -11,6 +11,9 @@
 body {
   background-color: #f8fafc;
   color: #0f172a;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   font-family:
     Inter,
     -apple-system,
@@ -19,6 +22,12 @@ body {
     Roboto,
     'Helvetica Neue',
     sans-serif;
+}
+
+/* Тёмная тема (класс dark на <html>) */
+html.dark body {
+  background-color: #020617;
+  color: #f1f5f9;
 }
 
 a {
@@ -49,6 +58,15 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-color: #020617;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
 
 /* Переопределяем проблемные media queries из стартового шаблона */

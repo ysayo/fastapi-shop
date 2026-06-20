@@ -41,7 +41,7 @@
         <main class="flex-grow">
           <!-- Информация о фильтрации -->
           <div class="mb-6 flex items-center justify-between">
-            <p class="text-sm font-medium text-ink-500">
+            <p class="text-sm font-medium text-ink-500 dark:text-ink-400">
               {{ t('home.productsFound', productsStore.productsCount) }}
             </p>
 
@@ -49,7 +49,7 @@
             <button
               v-if="productsStore.selectedCategory"
               @click="productsStore.clearCategoryFilter"
-              class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-brand-700 hover:bg-brand-50 transition-colors"
+              class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-brand-700 hover:bg-brand-50 dark:text-brand-300 dark:hover:bg-brand-500/10 transition-colors"
             >
               {{ t('home.clearFilter') }}
             </button>
@@ -58,17 +58,17 @@
           <!-- Состояние загрузки -->
           <div v-if="productsStore.loading" class="flex flex-col items-center py-20">
             <div
-              class="h-12 w-12 animate-spin rounded-full border-4 border-ink-200 border-t-brand-600"
+              class="h-12 w-12 animate-spin rounded-full border-4 border-ink-200 border-t-brand-600 dark:border-ink-700 dark:border-t-brand-500"
             ></div>
-            <p class="mt-4 text-ink-500">{{ t('home.loading') }}</p>
+            <p class="mt-4 text-ink-500 dark:text-ink-400">{{ t('home.loading') }}</p>
           </div>
 
           <!-- Ошибка -->
           <div
             v-else-if="productsStore.error"
-            class="rounded-2xl border border-red-100 bg-red-50 py-12 text-center"
+            class="rounded-2xl border border-red-100 bg-red-50 py-12 text-center dark:border-red-500/20 dark:bg-red-500/10"
           >
-            <p class="font-medium text-red-600">{{ t(productsStore.error) }}</p>
+            <p class="font-medium text-red-600 dark:text-red-400">{{ t(productsStore.error) }}</p>
           </div>
 
           <!-- Список товаров -->
@@ -86,12 +86,12 @@
           <!-- Пустое состояние -->
           <div
             v-else
-            class="flex flex-col items-center rounded-2xl border border-dashed border-ink-200 bg-white py-16 text-center"
+            class="flex flex-col items-center rounded-2xl border border-dashed border-ink-200 bg-white py-16 text-center dark:border-ink-700 dark:bg-ink-900"
           >
-            <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-ink-100">
+            <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-ink-100 dark:bg-ink-800">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-8 w-8 text-ink-400"
+                class="h-8 w-8 text-ink-400 dark:text-ink-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -104,10 +104,10 @@
                 />
               </svg>
             </div>
-            <p class="mt-4 text-lg font-semibold text-ink-700">{{ t('home.noProducts') }}</p>
+            <p class="mt-4 text-lg font-semibold text-ink-700 dark:text-ink-200">{{ t('home.noProducts') }}</p>
             <button
               @click="productsStore.clearCategoryFilter"
-              class="mt-4 rounded-lg bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-brand-100 transition-colors"
+              class="mt-4 rounded-lg bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-300 dark:hover:bg-brand-500/20 transition-colors"
             >
               {{ t('home.viewAll') }}
             </button>

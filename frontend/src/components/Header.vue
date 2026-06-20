@@ -6,7 +6,7 @@
 
 <template>
   <header
-    class="sticky top-0 z-50 border-b border-ink-200/70 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60"
+    class="sticky top-0 z-50 border-b border-ink-200/70 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:border-ink-800/70 dark:bg-ink-900/80 dark:supports-[backdrop-filter]:bg-ink-900/60 transition-colors"
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
@@ -30,7 +30,7 @@
               />
             </svg>
           </span>
-          <span class="hidden sm:inline text-xl font-extrabold tracking-tight text-ink-900 whitespace-nowrap">FastAPI Shop</span>
+          <span class="hidden sm:inline text-xl font-extrabold tracking-tight text-ink-900 dark:text-ink-50 whitespace-nowrap">FastAPI Shop</span>
         </router-link>
 
         <!-- Навигация -->
@@ -38,8 +38,8 @@
           <!-- Ссылка на каталог -->
           <router-link
             to="/"
-            class="hidden sm:inline-flex rounded-lg px-3 py-2 text-sm font-medium text-ink-600 hover:bg-ink-100 hover:text-ink-900 transition-colors"
-            active-class="!text-brand-700 !bg-brand-50"
+            class="hidden sm:inline-flex rounded-lg px-3 py-2 text-sm font-medium text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50 transition-colors"
+            active-class="!text-brand-700 !bg-brand-50 dark:!text-brand-300 dark:!bg-brand-500/10"
           >
             {{ t('nav.catalog') }}
           </router-link>
@@ -47,8 +47,8 @@
           <!-- Корзина -->
           <router-link
             to="/cart"
-            class="relative inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-ink-600 hover:bg-ink-100 hover:text-ink-900 transition-colors"
-            active-class="!text-brand-700 !bg-brand-50"
+            class="relative inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50 transition-colors"
+            active-class="!text-brand-700 !bg-brand-50 dark:!text-brand-300 dark:!bg-brand-500/10"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -75,13 +75,41 @@
             </span>
           </router-link>
 
-          <span class="hidden sm:block h-6 w-px bg-ink-200"></span>
+          <!-- Переключатель темы -->
+          <button
+            type="button"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-ink-500 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50 transition-colors"
+            :aria-label="isDark ? t('theme.toLight') : t('theme.toDark')"
+            :title="isDark ? t('theme.toLight') : t('theme.toDark')"
+            @click="toggleTheme"
+          >
+            <!-- Луна (включить тёмную) -->
+            <svg v-if="!isDark" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+              />
+            </svg>
+            <!-- Солнце (включить светлую) -->
+            <svg v-else class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+              />
+            </svg>
+          </button>
+
+          <span class="hidden sm:block h-6 w-px bg-ink-200 dark:bg-ink-700"></span>
 
           <!-- Аккаунт: вход/регистрация или email + выход -->
           <template v-if="authStore.isAuthenticated">
-            <span class="hidden lg:inline text-sm font-medium text-ink-500">{{ authStore.email }}</span>
+            <span class="hidden lg:inline text-sm font-medium text-ink-500 dark:text-ink-400">{{ authStore.email }}</span>
             <button
-              class="inline-flex items-center rounded-lg border border-ink-200 px-4 py-2 text-sm font-semibold text-ink-700 hover:border-ink-300 hover:bg-ink-50 transition-colors"
+              class="inline-flex items-center rounded-lg border border-ink-200 px-4 py-2 text-sm font-semibold text-ink-700 hover:border-ink-300 hover:bg-ink-50 dark:border-ink-700 dark:text-ink-200 dark:hover:bg-ink-800 transition-colors"
               @click="authStore.logout()"
             >
               {{ t('nav.logout') }}
@@ -122,8 +150,10 @@ import { useI18n } from 'vue-i18n'
 import { useCartStore } from '@/stores/cart'
 import { useAuthStore } from '@/stores/auth'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
+import { useTheme } from '@/composables/useTheme'
 
 const { t } = useI18n()
 const cartStore = useCartStore()
 const authStore = useAuthStore()
+const { isDark, toggle: toggleTheme } = useTheme()
 </script>

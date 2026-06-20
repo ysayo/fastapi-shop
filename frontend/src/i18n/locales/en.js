@@ -8,6 +8,10 @@ export default {
     signIn: 'Sign In',
     logout: 'Logout',
   },
+  theme: {
+    toDark: 'Dark theme',
+    toLight: 'Light theme',
+  },
   home: {
     title: 'Product Catalog',
     subtitle: 'Discover our amazing products',
@@ -60,6 +64,8 @@ export default {
     clearCart: 'Clear Cart',
     each: 'each',
     checkoutAlert: 'Checkout functionality will be implemented soon!',
+    authRequired: 'Authorization required. Please sign in to place an order.',
+    signInToCheckout: 'Sign In',
     clearConfirm: 'Are you sure you want to clear your cart?',
   },
   auth: {

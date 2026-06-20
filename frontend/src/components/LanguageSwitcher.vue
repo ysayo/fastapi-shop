@@ -4,15 +4,15 @@
 -->
 
 <template>
-  <div class="flex items-center gap-0.5 rounded-lg bg-ink-100 p-1">
+  <div class="flex items-center gap-0.5 rounded-lg bg-ink-100 p-1 dark:bg-ink-800">
     <button
       v-for="loc in SUPPORTED_LOCALES"
       :key="loc"
       class="rounded-md px-2.5 py-1 text-xs font-bold transition-all"
       :class="
         locale === loc
-          ? 'bg-white text-brand-700 shadow-sm'
-          : 'text-ink-500 hover:text-ink-800'
+          ? 'bg-white text-brand-700 shadow-sm dark:bg-ink-700 dark:text-brand-300'
+          : 'text-ink-500 hover:text-ink-800 dark:text-ink-400 dark:hover:text-ink-100'
       "
       @click="setLocale(loc)"
     >

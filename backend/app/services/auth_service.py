@@ -60,10 +60,9 @@ class AuthService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User not found",
             )
-        if user.is_verified:
-            # Уже подтверждён — просто выдаём токен
-            return create_access_token(data={"sub": user.email})
 
+        # Код проверяем всегда — он используется и при регистрации,
+        # и при каждом входе (двухфакторное подтверждение).
         if (
             not user.verification_code
             or not user.verification_code_expires_at
@@ -92,14 +91,10 @@ class AuthService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User not found",
             )
-        if user.is_verified:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email already verified",
-            )
+        # Заново выдаём код (нужно как при регистрации, так и при входе по 2FA).
         self._issue_code(user)
 
-    def authenticate(self, email: str, password: str) -> str:
+    def authenticate(self, email: str, password: str) -> None:
         user = self.repo.get_by_email(email)
         if not user or not verify_password(password, user.hashed_password):
             raise HTTPException(
@@ -107,15 +102,14 @@ class AuthService:
                 detail="Incorrect email or password OR there is no registered user with that email",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        if not user.is_verified:
-            # Каждая попытка входа неподтверждённого аккаунта заново выдаёт код
-            # и шлёт его в Telegram (если чат привязан) либо на почту/в консоль.
-            self._issue_code(user)
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Email not verified",
-            )
-        return create_access_token(data={"sub": user.email})
+        # Двухфакторность: при КАЖДОМ входе выдаём свежий код и требуем подтверждения.
+        # Код уходит в Telegram (если чат привязан) либо на почту/в консоль.
+        # Токен выдаётся только после ввода кода на эндпоинте /verify.
+        self._issue_code(user)
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Verification code required",
+        )
 
     def _set_code(self, user: User) -> str:
         """Сгенерировать и записать (в объект) новый код подтверждения. Без сохранения в БД."""

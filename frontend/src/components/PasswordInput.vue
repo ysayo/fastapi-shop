@@ -5,21 +5,21 @@
 
 <template>
   <div>
-    <label class="mb-1.5 block text-sm font-medium text-ink-700">{{ label }}</label>
+    <label class="mb-1.5 block text-sm font-medium text-ink-700 dark:text-ink-200">{{ label }}</label>
     <div class="relative">
       <input
         :value="modelValue"
         :type="visible ? 'text' : 'password'"
         :autocomplete="autocomplete"
         required
-        class="w-full rounded-xl border border-ink-200 bg-ink-50 px-3.5 py-2.5 pr-11 text-ink-900 placeholder-ink-400 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-100"
+        class="w-full rounded-xl border border-ink-200 bg-ink-50 px-3.5 py-2.5 pr-11 text-ink-900 placeholder-ink-400 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-100 dark:border-ink-700 dark:bg-ink-800 dark:text-ink-50 dark:placeholder-ink-500 dark:focus:bg-ink-800 dark:focus:ring-brand-500/20"
         placeholder="••••••••"
         @input="$emit('update:modelValue', $event.target.value)"
       />
       <!-- Кнопка показать/скрыть пароль -->
       <button
         type="button"
-        class="absolute inset-y-0 right-0 flex items-center px-3 text-ink-400 transition-colors hover:text-brand-600"
+        class="absolute inset-y-0 right-0 flex items-center px-3 text-ink-400 transition-colors hover:text-brand-600 dark:text-ink-500 dark:hover:text-brand-300"
         :aria-label="visible ? t('auth.hidePassword') : t('auth.showPassword')"
         @click="visible = !visible"
       >

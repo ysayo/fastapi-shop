@@ -26,27 +26,27 @@
             />
           </svg>
         </div>
-        <h1 class="text-2xl font-extrabold tracking-tight text-ink-900 mb-1">
+        <h1 class="text-2xl font-extrabold tracking-tight text-ink-900 dark:text-ink-50 mb-1">
           {{ isLogin ? t('auth.signInTitle') : t('auth.signUpTitle') }}
         </h1>
-        <p class="text-ink-500">
+        <p class="text-ink-500 dark:text-ink-400">
           {{ isLogin ? t('auth.signInWelcome') : t('auth.signUpWelcome') }}
         </p>
       </div>
 
       <!-- Форма -->
       <form
-        class="space-y-4 rounded-2xl border border-ink-200/70 bg-white p-8 shadow-card"
+        class="space-y-4 rounded-2xl border border-ink-200/70 bg-white p-8 shadow-card dark:border-ink-800 dark:bg-ink-900"
         @submit.prevent="handleSubmit"
       >
         <div>
-          <label class="mb-1.5 block text-sm font-medium text-ink-700">{{ t('auth.email') }}</label>
+          <label class="mb-1.5 block text-sm font-medium text-ink-700 dark:text-ink-200">{{ t('auth.email') }}</label>
           <input
             v-model="email"
             type="email"
             required
             autocomplete="email"
-            class="w-full rounded-xl border border-ink-200 bg-ink-50 px-3.5 py-2.5 text-ink-900 placeholder-ink-400 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-100"
+            class="w-full rounded-xl border border-ink-200 bg-ink-50 px-3.5 py-2.5 text-ink-900 placeholder-ink-400 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-100 dark:border-ink-700 dark:bg-ink-800 dark:text-ink-50 dark:placeholder-ink-500 dark:focus:bg-ink-800 dark:focus:ring-brand-500/20"
             placeholder="you@example.com"
           />
         </div>
@@ -66,7 +66,7 @@
             autocomplete="new-password"
           />
           <!-- Подсказка о несовпадении паролей -->
-          <p v-if="passwordsMismatch" class="mt-1.5 text-sm text-red-600">
+          <p v-if="passwordsMismatch" class="mt-1.5 text-sm text-red-600 dark:text-red-400">
             {{ t('auth.passwordsDontMatch') }}
           </p>
         </div>
@@ -74,7 +74,7 @@
         <!-- Сообщение об ошибке -->
         <p
           v-if="error"
-          class="rounded-xl bg-red-50 px-3.5 py-2.5 text-sm font-medium text-red-600"
+          class="rounded-xl bg-red-50 px-3.5 py-2.5 text-sm font-medium text-red-600 dark:bg-red-500/10 dark:text-red-400"
         >
           {{ error }}
         </p>
@@ -90,16 +90,16 @@
       </form>
 
       <!-- Перекрёстная ссылка на второй режим -->
-      <p class="mt-6 text-center text-sm text-ink-500">
+      <p class="mt-6 text-center text-sm text-ink-500 dark:text-ink-400">
         <template v-if="isLogin">
           {{ t('auth.noAccount') }}
-          <router-link to="/register" class="ml-1 font-semibold text-brand-700 hover:underline">
+          <router-link to="/register" class="ml-1 font-semibold text-brand-700 hover:underline dark:text-brand-300">
             {{ t('auth.register') }}
           </router-link>
         </template>
         <template v-else>
           {{ t('auth.haveAccount') }}
-          <router-link to="/login" class="ml-1 font-semibold text-brand-700 hover:underline">
+          <router-link to="/login" class="ml-1 font-semibold text-brand-700 hover:underline dark:text-brand-300">
             {{ t('auth.login') }}
           </router-link>
         </template>

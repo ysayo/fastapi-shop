@@ -8,6 +8,10 @@ export default {
     signIn: 'Войти',
     logout: 'Выйти',
   },
+  theme: {
+    toDark: 'Тёмная тема',
+    toLight: 'Светлая тема',
+  },
   home: {
     title: 'Каталог товаров',
     subtitle: 'Откройте для себя наши замечательные товары',
@@ -60,6 +64,8 @@ export default {
     clearCart: 'Очистить корзину',
     each: 'за шт.',
     checkoutAlert: 'Оформление заказа скоро будет реализовано!',
+    authRequired: 'Требуется авторизация. Войдите в аккаунт, чтобы оформить заказ.',
+    signInToCheckout: 'Войти',
     clearConfirm: 'Вы уверены, что хотите очистить корзину?',
   },
   auth: {
