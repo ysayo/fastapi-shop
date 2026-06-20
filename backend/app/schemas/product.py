@@ -20,6 +20,11 @@ class ProductResponse(BaseModel):
     id: int = Field(..., description="Unique product ID")
     name: str
     description: Optional[str]
+    # Локализованные версии (могут быть None, если перевод ещё не сделан)
+    name_ru: Optional[str] = None
+    name_en: Optional[str] = None
+    description_ru: Optional[str] = None
+    description_en: Optional[str] = None
     price: float
     category_id: int
     image_url: Optional[str]

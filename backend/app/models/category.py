@@ -9,6 +9,10 @@ class Category(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, nullable=False, index=True)
     slug = Column(String, unique=True, nullable=False, index=True)
+    # Локализованные названия (заполняются скриптом автоперевода).
+    # Фолбэк — базовое name, если перевод пуст.
+    name_ru = Column(String, nullable=True)
+    name_en = Column(String, nullable=True)
 
     products = relationship("Product", back_populates="category")
 

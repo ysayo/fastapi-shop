@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import Optional
 
 
 class CategoryBase(BaseModel):
@@ -12,6 +13,9 @@ class CategoryCreate(CategoryBase):
 
 class CategoryResponse(CategoryBase):
     id: int = Field(..., description='Unique category identifier')
+    # Локализованные названия (могут быть None, если перевод ещё не сделан)
+    name_ru: Optional[str] = None
+    name_en: Optional[str] = None
 
     class Config:
         from_attributes = True

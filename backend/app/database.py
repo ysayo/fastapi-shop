@@ -21,6 +21,7 @@ def get_db():
 def init_db():
     Base.metadata.create_all(bind=engine)
     _migrate_user_columns()
+    _migrate_localization_columns()
 
 
 def _migrate_user_columns():
@@ -48,3 +49,34 @@ def _migrate_user_columns():
         # чтобы не заблокировать им вход.
         if "is_verified" not in existing:
             conn.execute(text("UPDATE users SET is_verified = 1"))
+
+
+def _migrate_localization_columns():
+    """
+    Лёгкая авто-миграция: добавляет колонки локализации в products и categories.
+    create_all не изменяет уже созданные таблицы, поэтому добавляем вручную.
+    """
+    inspector = inspect(engine)
+    tables = inspector.get_table_names()
+
+    targets = {
+        "products": {
+            "name_ru": "VARCHAR",
+            "name_en": "VARCHAR",
+            "description_ru": "TEXT",
+            "description_en": "TEXT",
+        },
+        "categories": {
+            "name_ru": "VARCHAR",
+            "name_en": "VARCHAR",
+        },
+    }
+
+    with engine.begin() as conn:
+        for table, columns in targets.items():
+            if table not in tables:
+                continue
+            existing = {col["name"] for col in inspector.get_columns(table)}
+            for name, ddl in columns.items():
+                if name not in existing:
+                    conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {name} {ddl}"))
