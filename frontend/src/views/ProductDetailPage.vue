@@ -56,11 +56,11 @@
       >
         <div class="grid grid-cols-1 md:grid-cols-2">
           <!-- Изображение -->
-          <div class="aspect-square overflow-hidden bg-ink-100 dark:bg-ink-800">
+          <div class="flex aspect-square items-center justify-center overflow-hidden bg-white p-8 md:p-10">
             <img
               :src="product.image_url"
               :alt="product.name"
-              class="h-full w-full object-cover"
+              class="max-h-full max-w-full object-contain"
               @error="handleImageError"
             />
           </div>
@@ -78,7 +78,7 @@
 
             <!-- Название -->
             <h1 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-ink-900 dark:text-ink-50">
-              {{ product.name }}
+              {{ localized(product, 'name') }}
             </h1>
 
             <!-- Цена -->
@@ -92,7 +92,7 @@
                 {{ t('product.description') }}
               </h2>
               <p class="leading-relaxed text-ink-600 dark:text-ink-300">
-                {{ product.description || t('product.noDescription') }}
+                {{ localized(product, 'description') || t('product.noDescription') }}
               </p>
             </div>
 
@@ -154,9 +154,11 @@ import { useRoute, useRouter } from 'vue-router'
 import { useProductsStore } from '@/stores/products'
 import { useCartStore } from '@/stores/cart'
 import { useCategoryName } from '@/composables/useCategoryName'
+import { useLocalized } from '@/composables/useLocalized'
 
 const { t, locale } = useI18n()
 const categoryName = useCategoryName()
+const localized = useLocalized()
 const route = useRoute()
 const router = useRouter()
 const productsStore = useProductsStore()

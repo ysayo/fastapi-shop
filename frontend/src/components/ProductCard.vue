@@ -10,11 +10,11 @@
   >
     <!-- Изображение товара -->
     <router-link :to="`/product/${product.id}`" class="relative block">
-      <div class="aspect-square overflow-hidden bg-ink-100 dark:bg-ink-800">
+      <div class="flex aspect-square items-center justify-center overflow-hidden bg-white p-5">
         <img
           :src="product.image_url"
           :alt="product.name"
-          class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+          class="max-h-full max-w-full object-contain transition-transform duration-500 ease-out group-hover:scale-105"
           @error="handleImageError"
         />
       </div>
@@ -33,7 +33,7 @@
         <h3
           class="mb-3 line-clamp-2 text-base font-semibold text-ink-900 transition-colors group-hover:text-brand-700 dark:text-ink-50 dark:group-hover:text-brand-300"
         >
-          {{ product.name }}
+          {{ localized(product, 'name') }}
         </h3>
       </router-link>
 
@@ -87,9 +87,11 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useCartStore } from '@/stores/cart'
 import { useCategoryName } from '@/composables/useCategoryName'
+import { useLocalized } from '@/composables/useLocalized'
 
 const { t } = useI18n()
 const categoryName = useCategoryName()
+const localized = useLocalized()
 
 // Props
 const props = defineProps({
