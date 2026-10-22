@@ -78,20 +78,17 @@ async def on_start_with_token(message: Message, command: CommandObject) -> None:
         return
 
     if resp.status_code == 200:
-        data = resp.json()
-        if data.get("already_verified"):
-            await message.answer("Эта почта уже подтверждена. Можете войти на сайте.")
-            return
-        code = data.get("code")
+        code = resp.json().get("code")
         await message.answer(
             "Ваш код подтверждения для <b>FastAPI Shop</b>:\n\n"
             f"<code>{code}</code>\n\n"
-            "Введите его на сайте, чтобы завершить регистрацию.",
+            "Введите его на сайте, чтобы завершить вход или регистрацию.",
             parse_mode="HTML",
         )
     elif resp.status_code == 400:
         await message.answer(
-            "Ссылка недействительна или устарела. Зарегистрируйтесь заново на сайте."
+            "Ссылка недействительна или уже использована. Войдите на сайте "
+            "и нажмите «Получить код в Telegram» на экране ввода кода."
         )
     else:
         logger.error("Unexpected backend response %s: %s", resp.status_code, resp.text)

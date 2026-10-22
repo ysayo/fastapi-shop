@@ -167,9 +167,12 @@ async function handleSubmit() {
       })
     }
   } catch (err) {
-    // Почта не подтверждена (403) — ведём на экран ввода кода
+    // Нужен код подтверждения (403) — ведём на экран ввода кода (с ссылкой на бота, если он настроен)
     if (isLogin.value && err.response?.status === 403) {
-      router.push({ name: 'verify', query: { email: email.value } })
+      router.push({
+        name: 'verify',
+        query: { email: email.value, tg: err.response.data?.telegram_link || undefined },
+      })
       return
     }
     error.value = resolveAuthError(err, isLogin.value)

@@ -38,6 +38,7 @@ class AuthService:
         """
         Вызывается ботом при /start <token>. Привязывает Telegram-чат к аккаунту
         и возвращает свежий код подтверждения (бот отправляет его в чат).
+        Ссылка одноразовая: после использования токен сгорает, новую выдаёт вход по паролю.
         """
         user = self.repo.get_by_link_token(token)
         if not user:
@@ -45,13 +46,12 @@ class AuthService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Invalid link token",
             )
-        if user.is_verified:
-            return {"email": user.email, "code": None, "already_verified": True}
 
         user.telegram_chat_id = str(chat_id)
+        user.link_token = None
         code = self._set_code(user)
         self.repo.save(user)
-        return {"email": user.email, "code": code, "already_verified": False}
+        return {"email": user.email, "code": code}
 
     def verify_code(self, email: str, code: str) -> str:
         user = self.repo.get_by_email(email)
@@ -94,7 +94,7 @@ class AuthService:
         # Заново выдаём код (нужно как при регистрации, так и при входе по 2FA).
         self._issue_code(user)
 
-    def authenticate(self, email: str, password: str) -> None:
+    def authenticate(self, email: str, password: str) -> User:
         user = self.repo.get_by_email(email)
         if not user or not verify_password(password, user.hashed_password):
             raise HTTPException(
@@ -105,11 +105,10 @@ class AuthService:
         # Двухфакторность: при КАЖДОМ входе выдаём свежий код и требуем подтверждения.
         # Код уходит в Telegram (если чат привязан) либо на почту/в консоль.
         # Токен выдаётся только после ввода кода на эндпоинте /verify.
+        # Свежая одноразовая ссылка на бота — чтобы код можно было получить в Telegram.
+        user.link_token = secrets.token_urlsafe(16)
         self._issue_code(user)
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Verification code required",
-        )
+        return user
 
     def _set_code(self, user: User) -> str:
         """Сгенерировать и записать (в объект) новый код подтверждения. Без сохранения в БД."""
